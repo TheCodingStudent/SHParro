@@ -1,0 +1,144 @@
+:root{color-scheme:dark;font-family:"Segoe UI Variable","Segoe UI",Inter,sans-serif;--bg:#111216;--panel:#17181d;--panel-2:#1d1e24;--line:#2a2b32;--text:#f4f5f1;--muted:#b9bbc3;--accent:#ff3864;--green:#9bcf63;--warning:#d8c66d;--sidebar-width:292px}
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;margin:0}
+body{overflow:hidden;background:var(--bg);color:var(--text)}
+button,input{font:inherit}
+.armaps-shell{position:relative;width:100%;height:100vh;overflow:hidden}
+
+/* MAP */
+.map-area{position:absolute;inset:0;min-width:0}
+#map{width:100%;height:100%;background:#20231f}
+
+/* SIDEBAR */
+.map-sidebar{position:fixed;z-index:1000;top:0;right:0;bottom:0;width:var(--sidebar-width);overflow-x:hidden;overflow-y:auto;direction:ltr;text-align:right;background:linear-gradient(90deg,rgba(0,0,0,.05),rgba(7,8,10,.35) 20%,rgba(7,8,10,.73) 50%,rgba(7,8,10,.94) 78%,#07080a);backdrop-filter:blur(3px);scrollbar-width:thin;scrollbar-color:#ffffff33 transparent}
+.map-sidebar::-webkit-scrollbar{width:5px}
+.map-sidebar::-webkit-scrollbar-track{background:transparent}
+.map-sidebar::-webkit-scrollbar-thumb{background:#ffffff33;border-radius:10px}
+.map-sidebar::-webkit-scrollbar-thumb:hover{background:#ff386473}
+
+/* BRAND */
+.brand-header{height:76px;display:none;align-items:center;justify-content:flex-end;gap:12px;padding:0 20px;text-align:right}
+.brand-mark{width:32px;height:32px;display:grid;place-items:center;flex:none;border:1px solid #ff3864a6;border-radius:8px;color:var(--accent);font:800 14px Consolas,monospace;box-shadow:0 0 24px #ff386414}
+.brand-header span{display:block;color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.brand-header strong{display:block;margin-top:2px;font-size:18px;letter-spacing:-.02em}
+
+/* GENERIC */
+.sidebar-section{padding:18px 20px;direction:ltr;text-align:right}
+.sidebar-section>label,.sidebar-section h2,.section-title-row label{display:block;color:var(--text);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;text-align:right}
+.sidebar-section h2{margin:0 0 12px}
+
+/* SEARCH */
+.search-row{display:grid;grid-template-columns:minmax(0,1fr) 38px;gap:8px;margin-top:10px;direction:ltr}
+.search-row input{min-width:0;height:38px;padding:0 11px;border:1px solid var(--line);border-radius:8px;outline:0;background:#181a17db;color:var(--text);text-align:right;direction:ltr;transition:.16s ease}
+.search-row input::placeholder{color:#777981}
+.search-row input:focus{border-color:var(--accent);box-shadow:0 0 0 2px #ff38641a;background:#1a1b1ff0}
+.icon-button{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--line);border-radius:7px;background:var(--panel-2);color:var(--accent);font-size:20px;cursor:pointer}
+.icon-button:hover{border-color:var(--accent);background:#ff386429}
+.search-status{min-height:16px;margin-top:7px;color:var(--muted);font-size:11px;text-align:right}
+
+/* MAIN GROUPS */
+.source-group{padding:0!important;border:0}
+.source-group>summary{min-height:52px;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:0 20px;direction:ltr;text-align:right;list-style:none;cursor:pointer;color:var(--text);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.source-group>summary:hover{background:linear-gradient(90deg,transparent,#ffffff09)}
+.source-group>summary::-webkit-details-marker,details summary::-webkit-details-marker{display:none}
+.source-group>summary>span:first-child{text-align:right}
+.source-badge{flex:none;padding:2px 5px;border:1px solid #ff386473;border-radius:4px;color:var(--accent);font-size:9px;font-weight:700;white-space:nowrap}
+.source-group>summary::after{width:12px;flex:none;color:var(--muted);font-size:12px;text-align:center}
+.source-group[open]>summary::after{content:"⌃"}
+.source-group:not([open])>summary::after{content:"⌄"}
+.source-content{padding-bottom:8px;direction:ltr;text-align:right}
+
+/* SERVICE STATUS */
+.service-status{margin:0 20px 8px;padding:5px 9px;border-right:2px solid var(--warning);color:var(--muted);font-size:10px;line-height:16px;text-align:right}
+.service-status.available{border-right-color:var(--green)}
+.service-status.unavailable{border-right-color:var(--accent);color:#d8a4ae}
+
+/* GROUPS */
+.layer-group{padding:0 20px 5px;border-top:1px solid #ffffff14;text-align:right}
+.layer-group summary{min-height:38px;display:flex;align-items:center;justify-content:flex-end;gap:7px;direction:ltr;color:var(--muted);cursor:pointer;list-style:none;font-size:11px;font-weight:500;text-align:right}
+.layer-group summary:hover{color:var(--text)}
+.layer-group summary::-webkit-details-marker{display:none}
+.layer-group summary::after{width:14px;flex:none;color:var(--muted);text-align:center}
+.layer-group[open] summary::after{content:"⌄"}
+.layer-group:not([open]) summary::after{content:"›"}
+
+/* LAYER ROW: status | text | checkbox */
+.layer-row{min-height:38px;display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:3px 0;direction:ltr;color:#dfe1dc;font-size:13px;cursor:pointer;text-align:right}
+.layer-row:hover{color:#fff}
+.layer-row>span:not(.layer-state){order:2;flex:0 1 auto;text-align:right;direction:ltr;line-height:1.3}
+.layer-row>input[type="checkbox"]{order:3;width:16px;height:16px;flex:0 0 16px;margin:0;accent-color:var(--accent);cursor:pointer}
+.layer-row>.layer-state{order:1;margin-right:auto;color:var(--muted);font-size:10px;white-space:nowrap;text-align:left}
+.layer-state.loading{color:var(--warning)}
+.layer-state.loaded{color:var(--green)}
+.layer-state.error{color:var(--accent)}
+.unavailable-layer,.unavailable-layer:hover{color:#686974;cursor:not-allowed}
+.unavailable-layer input{opacity:.45;cursor:not-allowed}
+
+/* CATALOG */
+.catalog-layer-list{max-height:280px;overflow-y:auto;scrollbar-width:thin}
+.catalog-layer-list .layer-row{min-height:38px;height:auto;padding:3px 0}
+.catalog-loading{padding:5px 0 9px;color:var(--muted);font-size:10px;line-height:16px;text-align:right}
+
+/* OPACITY */
+.section-title-row{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-bottom:12px;direction:ltr;text-align:right}
+.section-title-row h2{margin:0}
+.section-title-row>span{padding:2px 5px;border:1px solid #ff386459;border-radius:4px;color:var(--accent);font-size:9px}
+.opacity-section{padding-top:16px;border-top:1px solid #ffffff14}
+.opacity-section input{width:100%;accent-color:var(--accent)}
+.opacity-section output{color:var(--accent);font-size:12px;font-weight:600}
+
+/* BASEMAP */
+.basemap-picker{position:absolute;z-index:800;top:16px;right:calc(var(--sidebar-width) + 16px);width:250px;overflow:hidden;border:1px solid #ffffff0f;border-radius:8px;background:#17181dd1;backdrop-filter:blur(16px);box-shadow:0 12px 28px #00000040}
+.basemap-picker>summary{height:42px;display:grid;grid-template-columns:24px 1fr 20px;align-items:center;gap:4px;padding:0 10px;cursor:pointer;list-style:none;font-size:12px;font-weight:600}
+.basemap-picker>summary::-webkit-details-marker{display:none}
+.basemap-icon{color:var(--accent);font-size:16px}
+.chevron{color:var(--muted);text-align:right;transition:.16s}
+.basemap-picker[open] .chevron{transform:rotate(180deg)}
+.basemap-picker .basemap-grid{padding:10px;border-top:1px solid var(--line)}
+.basemap-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.basemap-option{min-width:0;padding:5px;border:1px solid var(--line);border-radius:7px;background:transparent;color:var(--muted);font-size:11px;cursor:pointer}
+.basemap-option:hover{border-color:#ff38648c;color:var(--text);background:#ff38640a}
+.basemap-option.active{border-color:var(--accent);color:var(--text);background:#ff38640f}
+.basemap-preview{height:43px;display:block;margin-bottom:5px;border-radius:4px;background-position:center;background-size:cover}
+.basemap-preview.streets{background-image:url("https://tile.openstreetmap.org/5/9/12.png")}
+.basemap-preview.satellite{background-image:url("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/5/12/9")}
+.basemap-preview.topographic{background-image:url("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/5/12/9")}
+.basemap-preview.light{background-image:url("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/5/12/9")}
+.basemap-preview.dark{background-image:url("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/5/12/9")}
+.basemap-preview.terrain{background-image:url("https://tile.opentopomap.org/5/9/12.png")}
+
+/* GPS */
+.locate-button{position:absolute;z-index:800;top:76px;left:18px;width:34px;height:34px;border:1px solid transparent;border-radius:7px;background:#242721f5;color:var(--text);box-shadow:0 6px 18px #00000047;cursor:pointer;font-size:19px;line-height:1}
+.locate-button:hover,.locate-button.active{border-color:var(--accent);color:var(--accent)}
+.locate-button.loading{animation:location-pulse 1.2s ease-in-out infinite}
+@keyframes location-pulse{50%{box-shadow:0 0 0 5px #ff38642e}}
+.location-status{position:absolute;z-index:800;top:118px;left:18px;max-width:min(320px,calc(100% - 36px));padding:7px 10px;border-radius:6px;background:#161815f0;color:var(--text);font-size:11px;opacity:0;pointer-events:none;transform:translateY(-4px);transition:.18s}
+.location-status.visible{opacity:1;transform:translateY(0)}
+
+/* MAP STATUS */
+.map-status{position:absolute;z-index:500;right:calc(var(--sidebar-width) + 10px);bottom:10px;display:flex;align-items:center;gap:14px;padding:6px 9px;border-radius:5px;background:#161815e0;color:#dde0d9;font-size:11px;pointer-events:none;backdrop-filter:blur(6px)}
+
+/* LEAFLET */
+.leaflet-control-zoom{border:0!important;box-shadow:0 6px 18px #00000047!important}
+.leaflet-control-zoom a,.leaflet-control-layers,.leaflet-control-attribution{border-radius:7px!important}
+.leaflet-control-zoom a{background:#242721f5!important;color:var(--text)!important;border-color:var(--line)!important}
+.leaflet-control-zoom a:hover{background:#2c2f29!important;color:var(--accent)!important}
+.leaflet-control-attribution{background:#161815c7!important;color:var(--muted)!important;backdrop-filter:blur(6px)}
+.leaflet-control-attribution a{color:var(--accent)!important}
+
+/* RESPONSIVE */
+@media(max-width:760px){
+  .map-sidebar{top:auto;width:100%;height:42vh;border-top:1px solid var(--line);background:#0c0d10f7;backdrop-filter:blur(14px)}
+  .basemap-picker{top:12px;right:12px;width:min(250px,calc(100% - 24px))}
+  .map-status{right:10px;bottom:calc(42vh + 10px)}
+  .locate-button{top:16px}
+  .location-status{top:58px}
+}
+@media(max-width:480px){
+  .map-sidebar{height:48vh}
+  .sidebar-section{padding:15px 16px}
+  .source-group>summary{padding:0 16px}
+  .layer-group{padding:0 16px 5px}
+  .service-status{margin:0 16px 8px}
+  .map-status{bottom:calc(48vh + 8px);max-width:calc(100% - 20px);gap:8px;font-size:10px}
+}

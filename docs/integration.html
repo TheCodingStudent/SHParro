@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Integración de herramientas - SHParro</title>
+  <link rel="stylesheet" href="../css/shparro.css">
+  <style>
+    body { overflow: auto; background: #18181b; }
+    .docs { max-width: 850px; margin: 0 auto; padding: 42px 24px 80px; line-height: 1.65; }
+    .docs a { color: #66d9ef; }
+    .docs h1, .docs h2 { line-height: 1.2; }
+    .docs h1 { font-size: 38px; }
+    .docs h2 { margin-top: 36px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .docs code { border-radius: 3px; padding: 2px 5px; background: #27272c; color: #e6db74; }
+    .docs pre { overflow: auto; border: 1px solid var(--border); padding: 16px; background: #111113; color: #e7e7e7; }
+    .docs table { width: 100%; border-collapse: collapse; }
+    .docs th, .docs td { border-bottom: 1px solid var(--border); padding: 10px; text-align: left; vertical-align: top; }
+    .docs th { color: #bcbcc4; }
+    .back { display: inline-block; margin-bottom: 24px; color: var(--muted); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <main class="docs">
+    <a class="back" href="../index.html">← Volver a SHParro</a>
+    <h1>Integrar una herramienta</h1>
+    <p>SHParro incluye interfaces estáticas mediante <code>iframe</code>. Cada herramienta conserva su HTML, CSS y JavaScript independientes.</p>
+
+    <h2>1. Colocar los archivos</h2>
+    <p>Agrega la aplicación dentro de <code>Web/&lt;nombre-herramienta&gt;/</code>. Debe tener un <code>index.html</code> accesible desde GitHub Pages.</p>
+
+    <h2>2. Registrar la herramienta</h2>
+    <p>Abre <code>tools.json</code> y añade un objeto. Ejemplo para una nueva herramienta:</p>
+    <pre><code>{
+  "id": "mi-herramienta",
+  "name": "Mi herramienta",
+  "shortName": "MH",
+  "description": "Descripción breve de la herramienta.",
+  "category": "Utilidades generales",
+  "path": "./Web/MiHerramienta/index.html",
+  "status": "available",
+  "offline": false,
+  "icon": "M"
+}</code></pre>
+
+    <h2>Campos</h2>
+    <table>
+      <thead><tr><th>Campo</th><th>Uso</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>Identificador único. Puede utilizarse en enlaces con <code>#tool=id</code>.</td></tr>
+        <tr><td><code>name</code></td><td>Nombre completo mostrado en tarjetas y barra superior.</td></tr>
+        <tr><td><code>description</code></td><td>Resumen corto mostrado en la tarjeta.</td></tr>
+        <tr><td><code>category</code></td><td>Agrupa herramientas en la cuadrícula y en el menú lateral.</td></tr>
+        <tr><td><code>path</code></td><td>Ruta relativa desde la raíz de SHParro.</td></tr>
+        <tr><td><code>status</code></td><td><code>available</code>, <code>requires</code>, <code>development</code> o <code>error</code>.</td></tr>
+        <tr><td><code>offline</code></td><td>Indica que la herramienta fue preparada para funcionar sin conexión.</td></tr>
+        <tr><td><code>icon</code></td><td>Texto corto o símbolo mostrado en la tarjeta.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>3. Abrir directamente</h2>
+    <p>Después de publicar el sitio, cualquier herramienta puede enlazarse así:</p>
+    <pre><code>https://thecodingstudent.github.io/SHParro/#tool=tran-all</code></pre>
+
+    <h2>Qué es un iframe</h2>
+    <p>Un <code>iframe</code> es una ventana HTML dentro de otra página. SHParro muestra cada herramienta dentro de esa ventana, aislando sus estilos y scripts. La herramienta puede seguir siendo instalada y usada en su URL original.</p>
+
+    <h2>Limitaciones en GitHub Pages</h2>
+    <ul>
+      <li>GitHub Pages solo sirve archivos estáticos; no ejecuta Flask, Django ni Python.</li>
+      <li>Las interfaces deben funcionar con HTML, CSS y JavaScript del navegador.</li>
+      <li>Las APIs externas deben permitir CORS o proporcionar una solución JSONP/backend externa.</li>
+      <li>Los favoritos se guardan en <code>localStorage</code> del navegador.</li>
+      <li>Para ejecutar el sitio localmente usa un servidor HTTP, no abras <code>index.html</code> mediante <code>file://</code>.</li>
+    </ul>
+  </main>
+</body>
+</html>

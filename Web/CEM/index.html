@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CEM - Elevaciones INEGI | SHParro</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/geotiff@2.1.3/dist-browser/geotiff.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header>
+      <span class="eyebrow">INEGI / CARTOGRAFÍA / RELIEVE</span>
+      <h1>Consulta del CEM</h1>
+      <p>Elevación del terreno con datos oficiales de INEGI. Modelo nacional WCS y Modelos Digitales de Elevación por carta 1:10,000 a 5 m.</p>
+    </header>
+
+    <nav class="source-tabs" aria-label="Fuente de elevación">
+      <button class="active" type="button" data-source="carta">Cartas 1:10,000 · 5 m</button>
+      <button type="button" data-source="wcs">CEM nacional · WCS</button>
+      <button type="button" data-source="batch">Consulta masiva</button>
+    </nav>
+
+    <section class="card" data-panel="carta">
+      <div class="section-heading"><div><span class="step-label">Paso 1</span><h2>Modelo Digital de Elevación por carta</h2></div></div>
+      <div class="form-grid">
+        <label>Clave de carta 1:10,000 <input id="chartCode" type="text" placeholder="Ej. F14A11"></label>
+        <label>Tipo de modelo
+          <select id="chartModel"><option value="S">Superficie (MDS)</option><option value="T">Terreno (MDT)</option></select>
+        </label>
+        <label>Resolución
+          <select id="chartResolution"><option value="5">5 m</option><option value="1.5">1.5 m</option></select>
+        </label>
+        <button class="primary-button" id="findChartDownloads" type="button">Buscar descarga</button>
+      </div>
+      <div class="notice">La descarga de 5 m se obtiene del catálogo oficial de cartas 1:10,000. El código debe corresponder exactamente a la cartografía disponible.</div>
+      <div id="chartResult" class="result-list" hidden></div>
+    </section>
+
+    <section class="card" data-panel="wcs" hidden>
+      <div class="section-heading"><div><span class="step-label">Paso 1</span><h2>Consulta puntual nacional</h2></div></div>
+      <div class="form-grid wcs-grid">
+        <label>Latitud WGS84 <input id="latitude" type="text" placeholder="19.432608"></label>
+        <label>Longitud WGS84 <input id="longitude" type="text" placeholder="-99.133209"></label>
+        <label>Resolución
+          <select id="wcsResolution"><option value="15">15 m</option><option value="30">30 m</option><option value="60">60 m</option><option value="90">90 m</option><option value="120">120 m</option></select>
+        </label>
+        <button class="primary-button" id="queryWcs" type="button">Consultar elevación</button>
+      </div>
+      <div class="elevation-result" id="wcsResult" hidden></div>
+      <a id="downloadRaster" class="secondary-button" hidden target="_blank" rel="noopener">Descargar raster del área</a>
+      <div id="wcsStatus" class="status" role="status"></div>
+    </section>
+
+    <section class="card" data-panel="batch" hidden>
+      <div class="section-heading">
+        <div><span class="step-label">Paso 2</span><h2>Consulta masiva</h2></div>
+        <div class="table-actions">
+          <button class="secondary-button" id="clearBatch" type="button">Limpiar</button>
+          <button id="queryBatch" type="button">Consultar hoja</button>
+        </div>
+      </div>
+      <p class="table-help">Pegue desde Excel dos columnas: latitud, longitud. Se consulta el CEM nacional WCS.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Latitud</th><th>Longitud</th><th>Elevación m</th></tr></thead>
+          <tbody id="batchRows">
+            <tr><td>1</td><td><input data-row="0" data-column="0"></td><td><input data-row="0" data-column="1"></td><td class="batch-elevation"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-actions output-actions">
+        <button class="secondary-button" id="copyBatch" type="button">Copiar resultados</button>
+        <button class="secondary-button" id="downloadCsv" type="button">Descargar CSV</button>
+      </div>
+      <div id="batchStatus" class="status" role="status"></div>
+    </section>
+  </main>
+</body>
+</html>

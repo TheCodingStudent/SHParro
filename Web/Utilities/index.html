@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Conversor UTM - SHParro</title>
+  <link rel="stylesheet" href="./styles.css?v=step2-sidebar-5">
+</head>
+<body>
+  <div class="utility-layout">
+  <main>
+    <header>
+      <span class="eyebrow">GEODESIA / UTILIDADES / WGS84</span>
+      <h1>Conversor UTM</h1>
+      <p>Convierta coordenadas UTM a geográficas y viceversa con precisión de seis decimales.</p>
+    </header>
+
+    <nav class="mode-tabs" aria-label="Tipo de conversión">
+      <button class="active" type="button" data-mode="utm-geographic">UTM a geográficas</button>
+      <button type="button" data-mode="geographic-utm">Geográficas a UTM</button>
+    </nav>
+
+    <section class="card">
+      <div class="section-heading">
+        <div>
+          <span class="step-label">Paso 1</span>
+          <h2>Coordenadas individuales</h2>
+        </div>
+      </div>
+
+      <div class="coordinate-input-grid">
+        <div class="utm-fields coordinate-fields" id="utmInputFields">
+          <label>Este <input id="singleEasting" type="text" inputmode="decimal" placeholder="500000"></label>
+          <label>Norte <input id="singleNorthing" type="text" inputmode="decimal" placeholder="2300000"></label>
+        </div>
+        <div class="geographic-fields coordinate-fields" id="geographicInputFields" hidden>
+          <label>Formato
+            <select id="geoFormat">
+              <option value="dd">Grados decimales (DD)</option>
+              <option value="dms">Grados-minutos-segundos (DMS)</option>
+              <option value="dmm">Grados-minutos decimales (DMM)</option>
+            </select>
+          </label>
+          <label>Latitud <input id="latitude" type="text" placeholder="20.674000"></label>
+          <label>Longitud <input id="longitude" type="text" placeholder="-103.343000"></label>
+        </div>
+        <label>Zona UTM
+          <select id="zone">
+            <option value="">Seleccione</option>
+            <option value="11">11</option><option value="12">12</option><option value="13">13</option>
+            <option value="14">14</option><option value="15">15</option><option value="16">16</option>
+          </select>
+        </label>
+        <label>Hemisferio
+          <select id="hemisphere"><option value="N">Norte</option><option value="S">Sur</option></select>
+        </label>
+        <button class="primary-button" id="convertSingle" type="button">Convertir</button>
+      </div>
+      <div class="result-panel" id="singleResult" hidden></div>
+    </section>
+
+    <section class="card">
+      <div class="section-heading">
+        <div>
+          <span class="step-label">Paso 2</span>
+          <h2>Hoja de coordenadas</h2>
+        </div>
+        <div class="table-actions">
+          <button class="secondary-button" id="swapCoordinates" type="button">Intercambiar Este/Norte</button>
+          <button id="convertBatch" type="button">Convertir hoja</button>
+          <button class="secondary-button" id="clearSheet" type="button">Limpiar</button>
+        </div>
+      </div>
+      <p class="table-help">Pegue desde Excel. Las columnas deben seguir el formato del modo de conversión seleccionado.</p>
+      <div class="table-wrap spreadsheet-wrap">
+        <table class="spreadsheet">
+          <thead id="sheetHeader"></thead>
+          <tbody id="sheetRows"></tbody>
+        </table>
+      </div>
+      <div class="table-actions output-actions">
+        <button class="secondary-button" id="copyResults" type="button" disabled>Copiar resultados</button>
+        <button class="secondary-button" id="downloadCsv" type="button" disabled>Descargar CSV</button>
+      </div>
+      <div class="table-wrap" id="batchResultWrap" hidden>
+        <table>
+          <thead id="resultHeader"></thead>
+          <tbody id="resultRows"></tbody>
+        </table>
+      </div>
+      <div id="messages" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+  <aside class="datum-sidebar">
+    <div class="datum-sidebar-header">
+      <span class="step-label">Marco de referencia</span>
+      <h2>Datum de origen</h2>
+    </div>
+    <label class="datum-select-label" for="sourceDatum">Datum
+      <select id="sourceDatum">
+        <option value="wgs84">WGS84</option>
+        <option value="nad27">NAD27</option>
+        <option value="itrf92">ITRF92</option>
+        <option value="itrf2008">ITRF2008</option>
+        <option value="itrf2014">ITRF2014</option>
+      </select>
+    </label>
+    <div class="datum-summary" id="datumSummary" aria-live="polite"></div>
+  </aside>
+  </div>
+  <script src="./app.js?v=step2-sidebar-5"></script>
+</body>
+</html>

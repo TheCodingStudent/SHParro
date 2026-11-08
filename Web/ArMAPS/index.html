@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ArMAPS | SHParro</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="./styles.css?v=20261108">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <main class="armaps-shell">
+    <aside class="map-sidebar">
+      <header class="brand-header">
+        <div class="brand-mark">A</div>
+        <div>
+          <span>SHParro</span>
+          <strong>ArMAPS</strong>
+        </div>
+      </header>
+
+      <div class="sidebar-section">
+        <label for="placeSearch">Ir a un lugar</label>
+        <div class="search-row">
+          <input id="placeSearch" type="search" placeholder="Ciudad, municipio, lugar..." autocomplete="off">
+          <button id="searchButton" class="icon-button" type="button" aria-label="Buscar">⌕</button>
+        </div>
+        <div id="searchStatus" class="search-status" role="status"></div>
+      </div>
+
+      <details class="source-group layers-section" open>
+        <summary><span>Capas INEGI</span><span class="source-badge">WMS</span></summary>
+        <div class="source-content">
+          <div id="inegiServiceStatus" class="service-status" role="status">Comprobando servicio INEGI...</div>
+          <details class="layer-group" open>
+            <summary>Mapa Digital v6.1</summary>
+            <div id="mdm61LayerList" class="catalog-layer-list">
+              <div class="catalog-loading">Se cargarán las capas desde GetCapabilities...</div>
+            </div>
+          </details>
+          <details class="layer-group" open>
+            <summary>Topografía y relieve</summary>
+            <label class="layer-row"><input type="checkbox" data-layer="espaciomapas:c_cuerpo_agua50_a_vw"><span>Cuerpos de agua 1:50k</span></label>
+            <label class="layer-row"><input type="checkbox" data-layer="pi_usv_7:cuerpo_agua"><span>Hidrografía</span></label>
+          </details>
+
+          <details class="layer-group" open>
+            <summary>Infraestructura</summary>
+            <label class="layer-row"><input type="checkbox" data-layer="pi_rnc:carreteras"><span>Carreteras</span></label>
+            <label class="layer-row"><input type="checkbox" data-layer="pi_rnc:vialidades"><span>Vialidades</span></label>
+            <label class="layer-row"><input type="checkbox" data-layer="pi_rnc:caminos"><span>Caminos</span></label>
+            <label class="layer-row"><input type="checkbox" data-layer="pi_rnc:estacion_ferrocarril"><span>Estaciones ferroviarias</span></label>
+            <label class="layer-row"><input type="checkbox" data-layer="pi_rnc:terminal_ferroviaria"><span>Terminales ferroviarias</span></label>
+            <label class="layer-row"><input type="checkbox" data-layer="espaciomapas:c_carretera50_l_vw"><span>Carreteras 1:50k</span></label>
+          </details>
+
+          <details class="layer-group">
+            <summary>Territorio y población</summary>
+            <label class="layer-row"><input type="checkbox" data-layer="pi_rnc:localidades_urbanas"><span>Localidades urbanas</span></label>
+          </details>
+          <details class="layer-group">
+            <summary>Vegetación</summary>
+            <label class="layer-row"><input type="checkbox" data-layer="pi_usv_7:bosques"><span>Bosques</span></label>
+          </details>
+        </div>
+      </details>
+
+      <details class="source-group layers-section">
+        <summary><span>Divisiones</span><span class="source-badge">INEGI / CONABIO</span></summary>
+        <div class="source-content">
+          <details class="layer-group" open>
+            <summary>División política</summary>
+            <label class="layer-row"><input type="checkbox" data-layer="pi_rnc:areas_geoestadisticas_estatales"><span>Entidades federativas</span><span class="layer-state" aria-live="polite"></span></label>
+            <label class="layer-row unavailable-layer"><input type="checkbox" disabled><span>Municipios · capa pendiente de validar</span></label>
+            <label class="layer-row"><input type="checkbox" data-layer="pi_rnc:areas_geoestadisticas_municipales_label"><span>Nombres de municipios</span><span class="layer-state" aria-live="polite"></span></label>
+          </details>
+          <details class="layer-group" open>
+            <summary>Cuadrículas cartográficas</summary>
+            <label class="layer-row"><input type="checkbox" data-layer="cnb:mosaico250kinegigw" data-wms="http://geoportal.conabio.gob.mx/geoserver/ows"><span>Mapa 1:250,000 · mosaico CONABIO</span><span class="layer-state" aria-live="polite"></span></label>
+            <label class="layer-row unavailable-layer"><input type="checkbox" disabled><span>Cuadrícula 1:50,000 · no publicada como WMS</span></label>
+            <label class="layer-row unavailable-layer"><input type="checkbox" disabled><span>Cuadrícula 1:10,000 · no publicada como WMS</span></label>
+          </details>
+        </div>
+      </details>
+
+      <details class="source-group layers-section">
+        <summary><span>Imágenes satelitales</span><span class="source-badge">NASA</span></summary>
+        <div class="source-content">
+          <details class="layer-group" open>
+            <summary>NASA GIBS</summary>
+            <label class="layer-row"><input type="checkbox" data-layer="MODIS_Terra_CorrectedReflectance_TrueColor" data-wms="https://gibs.earthdata.nasa.gov/wms/epsg3857/all/wms.cgi" data-format="image/jpeg" data-transparent="false"><span>MODIS Terra · color verdadero</span></label>
+            <label class="layer-row"><input type="checkbox" data-layer="MODIS_Terra_CorrectedReflectance_Bands367" data-wms="https://gibs.earthdata.nasa.gov/wms/epsg3857/all/wms.cgi" data-format="image/jpeg" data-transparent="false"><span>MODIS Terra · bandas 3-6-7</span></label>
+            <label class="layer-row"><input type="checkbox" data-layer="MODIS_Terra_Thermal_Anomalies_All" data-wms="https://gibs.earthdata.nasa.gov/wms/epsg3857/all/wms.cgi" data-format="image/png" data-transparent="true"><span>Anomalías térmicas · incendios</span></label>
+            <label class="layer-row"><input type="checkbox" data-layer="VIIRS_SNPP_CorrectedReflectance_TrueColor" data-wms="https://gibs.earthdata.nasa.gov/wms/epsg3857/all/wms.cgi" data-format="image/jpeg" data-transparent="false"><span>VIIRS Suomi NPP · color verdadero</span></label>
+          </details>
+        </div>
+      </details>
+
+      <details class="source-group layers-section">
+        <summary><span>Topografía externa</span><span class="source-badge">WMS</span></summary>
+        <div class="source-content">
+          <details class="layer-group" open>
+            <summary>terrestris / SRTM</summary>
+            <label class="layer-row"><input type="checkbox" data-layer="TOPO-WMS" data-wms="https://ows.terrestris.de/osm/service"><span>Mapa topográfico</span></label>
+            <label class="layer-row"><input type="checkbox" data-layer="SRTM30-Colored-Hillshade" data-wms="https://ows.terrestris.de/osm/service"><span>SRTM 30 · sombreado coloreado</span></label>
+            <label class="layer-row"><input type="checkbox" data-layer="SRTM30-Colored" data-wms="https://ows.terrestris.de/osm/service"><span>SRTM 30 · relieve coloreado</span></label>
+          </details>
+        </div>
+      </details>
+
+      <div class="sidebar-section opacity-section">
+        <div class="section-title-row"><label for="layerOpacity">Opacidad</label><output id="opacityValue">75%</output></div>
+        <input id="layerOpacity" type="range" min="10" max="100" value="75">
+      </div>
+    </aside>
+
+    <section class="map-area">
+      <div id="map" aria-label="Mapa interactivo"></div>
+      <button id="locateButton" class="locate-button" type="button" aria-label="Centrar en mi ubicación GPS" title="Mi ubicación GPS">⌾</button>
+      <div id="locationStatus" class="location-status" role="status" aria-live="polite"></div>
+      <details class="basemap-picker">
+        <summary><span class="basemap-icon">▧</span><span id="activeBasemapName">Calles</span><span class="chevron">⌄</span></summary>
+        <div class="basemap-grid" role="radiogroup" aria-label="Mapa base">
+          <button class="basemap-option active" type="button" data-basemap="streets"><span class="basemap-preview streets"></span><span>Calles</span></button>
+          <button class="basemap-option" type="button" data-basemap="light"><span class="basemap-preview light"></span><span>Claro</span></button>
+          <button class="basemap-option" type="button" data-basemap="dark"><span class="basemap-preview dark"></span><span>Oscuro</span></button>
+          <button class="basemap-option" type="button" data-basemap="satellite"><span class="basemap-preview satellite"></span><span>Satélite</span></button>
+          <button class="basemap-option" type="button" data-basemap="topographic"><span class="basemap-preview topographic"></span><span>Topográfico</span></button>
+          <button class="basemap-option" type="button" data-basemap="terrain"><span class="basemap-preview terrain"></span><span>Relieve</span></button>
+        </div>
+      </details>
+      <div class="map-status">
+        <span id="coordinates">Lat 19.4326 · Lon -99.1332</span>
+        <span>EPSG:4326</span>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

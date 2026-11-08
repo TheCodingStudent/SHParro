@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Transformación de coordenadas INEGI</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Transformación de coordenadas INEGI</h1>
+      <p>Capture o pegue coordenadas en la tabla, por filas o desde hojas tipo Excel. Las transformaciones utilizan las herramientas oficiales de INEGI.</p>
+    </header>
+
+    <nav class="workflow-progress" aria-label="Progreso de transformación">
+      <span class="active"><b>1</b> Configuración</span>
+      <span><b>2</b> Coordenadas</span>
+      <span><b>3</b> Resultados</span>
+    </nav>
+
+    <section class="card workflow-card" id="configurationSection">
+      <div class="section-heading">
+        <div>
+          <span class="step-label">Paso 1</span>
+          <h2>Configuración de transformación</h2>
+        </div>
+      </div>
+      <div class="grid controls">
+        <label>Marco de origen
+          <select id="sourceFrame"><option value="">Seleccione...</option><option value="nad27">NAD27</option><option value="itrf92">ITRF92, época 1988.0</option><option value="itrf2008">ITRF2008, época 2010.0</option></select>
+        </label>
+        <label>Marco de destino
+          <select id="targetFrame"><option value="">Seleccione...</option><option value="nad27">NAD27</option><option value="itrf92">ITRF92, época 1988.0</option><option value="itrf2008">ITRF2008, época 2010.0</option></select>
+        </label>
+        <label>Zona UTM
+          <select id="zone"><option value="">Seleccione...</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option></select>
+        </label>
+        <label>Tipo de Z
+          <select id="zType"><option value="">Seleccione...</option><option value="unconfirmed">Sin confirmar</option><option value="ellipsoidal">Altura elipsoidal</option><option value="orthometric">Elevación ortométrica</option></select>
+        </label>
+      </div>
+      <div class="primary-action">
+        <span>Continúe cuando haya puntos válidos.</span>
+        <button id="transform" class="primary-button" disabled>Transformar coordenadas</button>
+      </div>
+      <div id="processing" role="status" hidden>Procesando…</div>
+    </section>
+
+    <section class="card workflow-card">
+      <div class="section-heading">
+        <div>
+          <span class="step-label">Paso 2</span>
+          <h2>Puntos originales</h2>
+        </div>
+        <div class="table-actions">
+          <button type="button" class="tool-button secondary-button" id="swapCoordinates" title="Intercambiar los valores de Este y Norte en todas las filas">Intercambiar Este/Norte</button>
+          <button type="button" class="tool-button" id="addPoint">+ Agregar fila</button>
+          <button type="button" class="tool-button secondary-button" id="clearPoints">Limpiar</button>
+        </div>
+      </div>
+      <p class="table-help">Pegue desde Excel usando columnas: ID, Este, Norte, Z. Navegue con Tab o las flechas.</p>
+      <div class="table-wrap">
+        <table class="spreadsheet" aria-label="Tabla editable de coordenadas"><thead><tr><th class="row-number">#</th><th>ID</th><th>Este</th><th>Norte</th><th>Z</th><th class="row-action"></th></tr></thead><tbody id="sourceRows"></tbody></table>
+      </div>
+    </section>
+
+    <section class="card workflow-card">
+      <div class="section-heading">
+        <div>
+          <span class="step-label">Paso 3</span>
+          <h2>Resultados</h2>
+        </div>
+        <div class="table-actions">
+          <button type="button" class="tool-button secondary-button" id="copyResults">Copiar para Excel</button>
+          <button type="button" class="tool-button" id="generateReport" disabled>Generar reporte</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>ID</th><th>Este origen</th><th>Norte origen</th><th>Z original</th><th>Este destino</th><th>Norte destino</th><th>Altura destino</th><th>Estado</th><th>Advertencia/error</th></tr></thead><tbody id="resultRows"></tbody></table>
+      </div>
+    </section>
+
+    <section class="card" id="messages">
+      <h2>Mensajes</h2>
+      <div id="messageList">Sin mensajes.</div>
+    </section>
+
+  </main>
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "tran-all",
+    "name": "Transformador geodésico INEGI",
+    "shortName": "TRAN-ALL",
+    "description": "Transforma coordenadas entre NAD27, ITRF92 y ITRF2008 mediante los servicios de INEGI.",
+    "category": "Geodesia y coordenadas",
+    "path": "./Web/TRAN-ALL/index.html",
+    "status": "available",
+    "offline": false,
+    "icon": "◎"
+  },
+  {
+    "id": "utm-converter",
+    "name": "Conversor UTM",
+    "shortName": "UTM",
+    "description": "Convierte coordenadas UTM a geográficas WGS84 y viceversa.",
+    "category": "Geodesia y coordenadas",
+    "path": "./Web/Utilities/index.html",
+    "status": "available",
+    "offline": true,
+    "icon": "↔"
+  },
+  {
+    "id": "cem-elevation",
+    "name": "Consulta de Elevaciones CEM",
+    "shortName": "CEM",
+    "description": "Consulta elevaciones por punto y cartas MDE oficiales de INEGI, incluyendo resolución 5 m.",
+    "category": "Cartografía y relieve",
+    "path": "./Web/CEM/index.html",
+    "status": "available",
+    "offline": false,
+    "icon": "△"
+  },
+  {
+    "id": "armaps",
+    "name": "ArMAPS",
+    "shortName": "ArMAPS",
+    "description": "Visualizador cartográfico con navegación y capas WMS oficiales de INEGI.",
+    "category": "Mapas y cartografía",
+    "path": "./Web/ArMAPS/index.html",
+    "status": "available",
+    "offline": false,
+    "icon": "⌖"
+  }
+]
