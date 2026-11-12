@@ -12,6 +12,7 @@
 <body>
   <main class="armaps-shell">
     <aside class="map-sidebar">
+      <button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="Colapsar sidebar" aria-expanded="true">&#x2039;</button>
       <header class="brand-header">
         <div class="brand-mark">A</div>
         <div>
@@ -29,23 +30,23 @@
         <div id="searchStatus" class="search-status" role="status"></div>
       </div>
 
-      <details class="source-group layers-section" open>
+      <details class="source-group layers-section">
         <summary><span>Capas INEGI</span><span class="source-badge">WMS</span></summary>
         <div class="source-content">
           <div id="inegiServiceStatus" class="service-status" role="status">Comprobando servicio INEGI...</div>
-          <details class="layer-group" open>
+          <details class="layer-group">
             <summary>Mapa Digital v6.1</summary>
             <div id="mdm61LayerList" class="catalog-layer-list">
               <div class="catalog-loading">Se cargarán las capas desde GetCapabilities...</div>
             </div>
           </details>
-          <details class="layer-group" open>
+          <details class="layer-group">
             <summary>Topografía y relieve</summary>
             <label class="layer-row"><input type="checkbox" data-layer="espaciomapas:c_cuerpo_agua50_a_vw"><span>Cuerpos de agua 1:50k</span></label>
             <label class="layer-row"><input type="checkbox" data-layer="pi_usv_7:cuerpo_agua"><span>Hidrografía</span></label>
           </details>
 
-          <details class="layer-group" open>
+          <details class="layer-group">
             <summary>Infraestructura</summary>
             <label class="layer-row"><input type="checkbox" data-layer="pi_rnc:carreteras"><span>Carreteras</span></label>
             <label class="layer-row"><input type="checkbox" data-layer="pi_rnc:vialidades"><span>Vialidades</span></label>
@@ -69,13 +70,13 @@
       <details class="source-group layers-section">
         <summary><span>Divisiones</span><span class="source-badge">INEGI / CONABIO</span></summary>
         <div class="source-content">
-          <details class="layer-group" open>
+          <details class="layer-group">
             <summary>División política</summary>
             <label class="layer-row"><input type="checkbox" data-layer="pi_rnc:areas_geoestadisticas_estatales"><span>Entidades federativas</span><span class="layer-state" aria-live="polite"></span></label>
             <label class="layer-row unavailable-layer"><input type="checkbox" disabled><span>Municipios · capa pendiente de validar</span></label>
             <label class="layer-row"><input type="checkbox" data-layer="pi_rnc:areas_geoestadisticas_municipales_label"><span>Nombres de municipios</span><span class="layer-state" aria-live="polite"></span></label>
           </details>
-          <details class="layer-group" open>
+          <details class="layer-group">
             <summary>Cuadrículas cartográficas</summary>
             <label class="layer-row"><input type="checkbox" data-layer="cnb:mosaico250kinegigw" data-wms="http://geoportal.conabio.gob.mx/geoserver/ows"><span>Mapa 1:250,000 · mosaico CONABIO</span><span class="layer-state" aria-live="polite"></span></label>
             <label class="layer-row unavailable-layer"><input type="checkbox" disabled><span>Cuadrícula 1:50,000 · no publicada como WMS</span></label>
@@ -87,7 +88,7 @@
       <details class="source-group layers-section">
         <summary><span>Imágenes satelitales</span><span class="source-badge">NASA</span></summary>
         <div class="source-content">
-          <details class="layer-group" open>
+          <details class="layer-group">
             <summary>NASA GIBS</summary>
             <label class="layer-row"><input type="checkbox" data-layer="MODIS_Terra_CorrectedReflectance_TrueColor" data-wms="https://gibs.earthdata.nasa.gov/wms/epsg3857/all/wms.cgi" data-format="image/jpeg" data-transparent="false"><span>MODIS Terra · color verdadero</span></label>
             <label class="layer-row"><input type="checkbox" data-layer="MODIS_Terra_CorrectedReflectance_Bands367" data-wms="https://gibs.earthdata.nasa.gov/wms/epsg3857/all/wms.cgi" data-format="image/jpeg" data-transparent="false"><span>MODIS Terra · bandas 3-6-7</span></label>
@@ -100,7 +101,7 @@
       <details class="source-group layers-section">
         <summary><span>Topografía externa</span><span class="source-badge">WMS</span></summary>
         <div class="source-content">
-          <details class="layer-group" open>
+          <details class="layer-group">
             <summary>terrestris / SRTM</summary>
             <label class="layer-row"><input type="checkbox" data-layer="TOPO-WMS" data-wms="https://ows.terrestris.de/osm/service"><span>Mapa topográfico</span></label>
             <label class="layer-row"><input type="checkbox" data-layer="SRTM30-Colored-Hillshade" data-wms="https://ows.terrestris.de/osm/service"><span>SRTM 30 · sombreado coloreado</span></label>
@@ -109,10 +110,15 @@
         </div>
       </details>
 
-      <div class="sidebar-section opacity-section">
-        <div class="section-title-row"><label for="layerOpacity">Opacidad</label><output id="opacityValue">75%</output></div>
-        <input id="layerOpacity" type="range" min="10" max="100" value="75">
-      </div>
+      <details class="source-group layers-section">
+        <summary><span>Capas teseladas</span><span class="source-badge">WMTS</span></summary>
+        <div class="source-content">
+          <details class="layer-group">
+            <summary>NASA GIBS</summary>
+            <label class="layer-row"><input type="checkbox" data-layer="MODIS_Terra_CorrectedReflectance_TrueColor" data-wmts="https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/{time}/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg" data-transparent="false"><span>MODIS Terra · color verdadero</span><span class="layer-state" aria-live="polite"></span></label>
+          </details>
+        </div>
+      </details>
     </aside>
 
     <section class="map-area">

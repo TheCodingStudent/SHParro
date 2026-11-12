@@ -66,6 +66,29 @@ window.addEventListener("DOMContentLoaded", () => {
     minZoom: 3,
     zoomControl: true
   });
+  map.createPane("wms-overlay");
+  map.getPane("wms-overlay").style.zIndex = 450;
+
+  const sidebar = document.querySelector(".map-sidebar");
+  const basemapPicker = document.querySelector(".basemap-picker");
+  const mapArea = document.querySelector(".map-area");
+  const sidebarToggle = document.querySelector("#sidebarToggle");
+  sidebarToggle?.addEventListener("click", () => {
+    const collapsed = sidebar.classList.toggle("collapsed");
+    sidebarToggle.setAttribute("aria-expanded", String(!collapsed));
+    sidebarToggle.setAttribute("aria-label", collapsed ? "Expandir sidebar" : "Colapsar sidebar");
+    sidebarToggle.textContent = collapsed ? "\u203A" : "\u2039";
+    window.setTimeout(() => map.invalidateSize(), 260);
+  });
+
+  document.querySelectorAll(".unavailable-layer").forEach(row => {
+    if (!row.textContent.toLowerCase().includes("municipios")) return;
+    const input = row.querySelector("input");
+    input.disabled = false;
+    input.dataset.layer = "bd_geo_cpv2025:municipios";
+    row.classList.remove("unavailable-layer");
+  });
+
   L.control.scale({ imperial: false, position: "bottomleft" }).addTo(map);
 
   const baseMaps = {
@@ -96,6 +119,17 @@ window.addEventListener("DOMContentLoaded", () => {
   };
   let activeBase = baseMaps.streets.addTo(map);
 
+  function updateSidebarTone(baseMapName) {
+    const darkMap = ["satellite", "dark"].includes(baseMapName);
+    sidebar?.classList.toggle("light-text", darkMap);
+    sidebar?.classList.toggle("dark-text", !darkMap);
+    basemapPicker?.classList.toggle("light-text", darkMap);
+    basemapPicker?.classList.toggle("dark-text", !darkMap);
+    mapArea?.classList.toggle("light-text", darkMap);
+    mapArea?.classList.toggle("dark-text", !darkMap);
+  }
+  updateSidebarTone("streets");
+
   const wmsLayers = new Map();
   function setWmsOpacity(opacity) {
     wmsLayers.forEach(layer => layer.setOpacity(opacity));
@@ -108,6 +142,7 @@ window.addEventListener("DOMContentLoaded", () => {
       activeBase = baseMaps[button.dataset.basemap];
       activeBase.addTo(map);
       document.querySelector("#activeBasemapName").textContent = button.querySelector("span:last-child").textContent;
+      updateSidebarTone(button.dataset.basemap);
     });
   });
 
@@ -122,28 +157,37 @@ window.addEventListener("DOMContentLoaded", () => {
         }
         state.textContent = "cargando";
         state.className = "layer-state loading";
-        const opacity = Number(document.querySelector("#layerOpacity").value) / 100;
+        const opacity = 1;
+        const wmtsTemplate = input.dataset.wmts;
         let wmsUrl = input.dataset.wms || INEGI_WMS;
         const nasaLayer = wmsUrl.includes("gibs.earthdata.nasa.gov");
         const yesterday = new Date();
         yesterday.setUTCDate(yesterday.getUTCDate() - 1);
         const wmsVersion = input.dataset.version || "1.3.0";
         const wmsCrs = input.dataset.crs === "EPSG:4326" ? L.CRS.EPSG4326 : L.CRS.EPSG3857;
-        const layer = L.tileLayer.wms(wmsUrl, {
-          layers: input.dataset.layer,
-          format: input.dataset.format || "image/png",
-          transparent: input.dataset.transparent !== "false",
-          version: wmsVersion,
-          crs: wmsCrs,
-          opacity,
-          keepBuffer: 2,
-          updateWhenIdle: true,
-          ...(nasaLayer ? { time: yesterday.toISOString().slice(0, 10) } : {})
-        });
+        const layer = wmtsTemplate
+          ? L.tileLayer(wmtsTemplate.replace("{time}", yesterday.toISOString().slice(0, 10)), {
+              opacity,
+              keepBuffer: 2,
+              updateWhenIdle: true,
+              pane: "wms-overlay"
+            })
+          : L.tileLayer.wms(wmsUrl, {
+              layers: input.dataset.layer,
+              format: input.dataset.format || "image/png",
+              transparent: input.dataset.transparent !== "false",
+              version: wmsVersion,
+              crs: wmsCrs,
+              opacity,
+              keepBuffer: 2,
+              updateWhenIdle: true,
+              pane: "wms-overlay",
+              ...(nasaLayer ? { time: yesterday.toISOString().slice(0, 10) } : {})
+            });
         let loadedTiles = 0;
         let failedTiles = 0;
         let retryTimer = null;
-        const layerKey = `${wmsUrl}|${input.dataset.layer}`;
+        const layerKey = `${wmtsTemplate || wmsUrl}|${input.dataset.layer}`;
         layer.on("tileload", () => {
           loadedTiles += 1;
           failedTiles = 0;
@@ -167,7 +211,7 @@ window.addEventListener("DOMContentLoaded", () => {
         wmsLayers.set(layerKey, layer);
       } else {
         const wmsUrl = input.dataset.wms || INEGI_WMS;
-        const layerKey = `${wmsUrl}|${input.dataset.layer}`;
+        const layerKey = `${input.dataset.wmts || wmsUrl}|${input.dataset.layer}`;
         const layer = wmsLayers.get(layerKey);
         if (layer) {
           map.removeLayer(layer);
@@ -183,13 +227,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll("[data-layer]").forEach(input => {
     input.addEventListener("change", handleWmsLayerChange);
-  });
-
-  const opacityInput = document.querySelector("#layerOpacity");
-  opacityInput.addEventListener("input", () => {
-    const opacity = Number(opacityInput.value) / 100;
-    document.querySelector("#opacityValue").value = `${opacityInput.value}%`;
-    setWmsOpacity(opacity);
   });
 
   map.on("mousemove", event => {

@@ -12,11 +12,10 @@
   <div class="app-shell">
     <main class="main">
       <header class="topbar">
-        <a class="brand" href="./" aria-label="Inicio de SHParro">
+        <a class="brand" href="./index.html" aria-label="Inicio de SHParro">
           <span class="brand-mark">S</span><strong>SHParro</strong>
         </a>
         <nav class="primary-nav" aria-label="Secciones">
-          <button class="nav-item active" data-view="home" type="button">Herramientas</button>
           <button class="nav-item" data-view="favorites" type="button">Favoritos</button>
         </nav>
         <button class="icon-button mobile-menu" id="mobileMenu" type="button" aria-label="Abrir menú">☰</button>
@@ -26,6 +25,7 @@
           <kbd>Ctrl K</kbd>
         </label>
         <div class="topbar-actions">
+          <button class="icon-button refresh-button" id="reloadTools" type="button" title="Actualizar herramientas" aria-label="Actualizar herramientas">↻</button>
           <a class="icon-button" id="docsLink" href="./docs/integration.html" title="Documentación">?</a>
           <span class="connection-pill" id="connectionPill"><span></span> Online</span>
         </div>
@@ -35,10 +35,14 @@
         <div class="workspace-heading">
           <div>
             <span class="eyebrow">Área personal</span>
-            <h1>Herramientas</h1>
+            <h1>Explora el territorio<br><em>con precisión.</em></h1>
             <p id="toolsSummary">Reuniendo interfaces y utilidades en un solo espacio.</p>
+            <div class="hero-meta" aria-label="Resumen del espacio">
+              <span><strong>SH</strong> Herramientas geoespaciales</span>
+              <span class="hero-divider" aria-hidden="true"></span>
+              <span>INEGI · WMS · GIS</span>
+            </div>
           </div>
-          <button class="button secondary" id="reloadTools" type="button">Actualizar</button>
         </div>
 
         <div id="toolGroups"></div>
