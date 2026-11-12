@@ -1,0 +1,13 @@
+Posibles ideas:
+
+- Herramienta para tomar notas, al momento de subirle imagenes que tambien se anexe la informacion GPS. Podria despues exportarse un KMZ con los puntos, imagenes y ademas utilizar etiquetas en las imagenes para agrupar por layers y asignarle simbolos
+
+- Investigar si los Lisp pueden usarse en civil 3D desde un link
+
+- De algun modo utilizar tambien como HUB donde se enlace una computadora y poder acceder a archivos desde el celular (archivos de texto de momento)
+
+- Una herramienta que tome en tiempo real tu ubicacion y al final pueda exportarse esa informacion
+
+- Agregar medicion a ArMaps
+
+- Hacer que el converson de coordenadas UTM no utilice internet

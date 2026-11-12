@@ -15,10 +15,26 @@
         <a class="brand" href="./index.html" aria-label="Inicio de SHParro">
           <span class="brand-mark">S</span><strong>SHParro</strong>
         </a>
-        <nav class="primary-nav" aria-label="Secciones">
-          <button class="nav-item" data-view="favorites" type="button">Favoritos</button>
+        <nav class="menubar" aria-label="Menú principal">
+          <div class="menu" data-menu="file">
+            <button class="menu-trigger" type="button" aria-haspopup="true" aria-expanded="false">Archivo</button>
+            <div class="menu-panel file-menu" role="menu">
+              <button type="button" role="menuitem" disabled>Abrir archivo… <kbd>Ctrl O</kbd></button>
+              <button type="button" role="menuitem" disabled>Abrir proyecto…</button>
+              <div class="menu-separator" role="separator"></div>
+              <button type="button" role="menuitem" disabled>Guardar <kbd>Ctrl S</kbd></button>
+              <button type="button" role="menuitem" disabled>Guardar como…</button>
+            </div>
+          </div>
+          <div class="menu" data-menu="tools">
+            <button class="menu-trigger" type="button" aria-haspopup="true" aria-expanded="false">Herramientas</button>
+            <div class="menu-panel tools-menu" role="menu">
+              <div class="menu-heading">Herramientas</div>
+              <div id="toolsMenuItems"></div>
+            </div>
+          </div>
+          <button class="nav-item" id="favoritesView" data-view="favorites" type="button">Favoritos</button>
         </nav>
-        <button class="icon-button mobile-menu" id="mobileMenu" type="button" aria-label="Abrir menú">☰</button>
         <label class="search-box" for="toolSearch">
           <span aria-hidden="true">⌕</span>
           <input id="toolSearch" type="search" placeholder="Buscar herramientas..." autocomplete="off">
@@ -32,23 +48,27 @@
       </header>
 
       <section class="content-view" id="homeView">
-        <div class="workspace-heading">
-          <div>
-            <span class="eyebrow">Área personal</span>
-            <h1>Explora el territorio<br><em>con precisión.</em></h1>
-            <p id="toolsSummary">Reuniendo interfaces y utilidades en un solo espacio.</p>
-            <div class="hero-meta" aria-label="Resumen del espacio">
-              <span><strong>SH</strong> Herramientas geoespaciales</span>
-              <span class="hero-divider" aria-hidden="true"></span>
-              <span>INEGI · WMS · GIS</span>
-            </div>
-          </div>
+        <div class="welcome-screen">
+          <div class="home-logo" aria-hidden="true">S</div>
+          <span class="eyebrow">Área personal</span>
+          <h1>Explora el territorio<br><em>con precisión.</em></h1>
+          <p>Un espacio para transformar coordenadas, consultar relieve y trabajar con información geoespacial.</p>
+          <div class="welcome-hint">Abre <strong>Herramientas</strong> para comenzar.</div>
         </div>
-
-        <div id="toolGroups"></div>
       </section>
 
       <section class="content-view hidden" id="toolView">
+        <div class="tool-toolbar">
+          <button class="tool-back" id="closeTool" type="button">← <span>Inicio</span></button>
+          <div class="tool-context">
+            <strong id="activeToolName">Herramienta</strong>
+            <span id="activeToolCategory">SHParro</span>
+          </div>
+          <div class="tool-actions">
+            <button class="icon-button" id="favoriteActive" type="button" aria-label="Agregar a favoritos">☆</button>
+            <a class="icon-button" id="openToolDirect" href="#" target="_blank" rel="noopener" aria-label="Abrir herramienta en otra pestaña">↗</a>
+          </div>
+        </div>
         <iframe id="toolFrame" title="Herramienta SHParro"></iframe>
       </section>
     </main>

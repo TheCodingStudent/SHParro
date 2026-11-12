@@ -16,13 +16,12 @@
   ];
 
   const FAVORITES_KEY = "shparro:favorites";
-  const toolsGroups = document.querySelector("#toolGroups");
+  const toolsMenuItems = document.querySelector("#toolsMenuItems");
   const toolSearch = document.querySelector("#toolSearch");
   const toolFrame = document.querySelector("#toolFrame");
   const homeView = document.querySelector("#homeView");
   const toolView = document.querySelector("#toolView");
   let tools = [];
-  let activeCategory = "all";
   let activeView = "home";
 
   const favorites = () => {
@@ -31,7 +30,6 @@
   };
 
   const setFavorites = ids => localStorage.setItem(FAVORITES_KEY, JSON.stringify(ids));
-  const statusLabel = { available: "Disponible", requires: "Requiere conexión", development: "En desarrollo", error: "Fuera de servicio" };
 
   function resolveToolPath(path) {
     return new URL(path.replace("./", ""), document.baseURI).href;
@@ -49,73 +47,43 @@
     window.setTimeout(() => toast.remove(), 3200);
   }
 
-  function renderCategoryNav() {
-    const categories = [...new Set(tools.map(tool => tool.category))];
-    const categoryNav = document.querySelector("#categoryNav");
-    if (!categoryNav) return;
-    categoryNav.innerHTML = [
-      '<button class="category-button active" data-category="all">Todas las herramientas</button>',
-      ...categories.map(category => `<button class="category-button" data-category="${escapeHtml(category)}">${escapeHtml(category)}</button>`)
-    ].join("");
-
-    document.querySelectorAll(".category-button").forEach(button => {
-      button.addEventListener("click", () => {
-        activeCategory = button.dataset.category;
-        document.querySelectorAll(".category-button").forEach(item => item.classList.toggle("active", item === button));
-        renderTools();
-        closeMobileMenu();
-      });
-    });
-  }
-
   function escapeHtml(value) {
     const element = document.createElement("span");
     element.textContent = value;
     return element.innerHTML;
   }
 
-  function renderTools() {
+  function renderToolsMenu() {
     const query = toolSearch.value.trim().toLocaleLowerCase("es");
     let visibleTools = tools.filter(tool => {
-      const matchesCategory = activeCategory === "all" || tool.category === activeCategory;
       const matchesQuery = !query || `${tool.name} ${tool.shortName || ""} ${tool.description} ${tool.category}`.toLocaleLowerCase("es").includes(query);
       const matchesView = activeView !== "favorites" || favorites().includes(tool.id);
-      return matchesCategory && matchesQuery && matchesView;
+      return matchesQuery && matchesView;
     });
 
-    const grouped = visibleTools.reduce((groups, tool) => {
-      (groups[tool.category] ||= []).push(tool);
-      return groups;
-    }, {});
-
     if (!visibleTools.length) {
-      toolsGroups.innerHTML = '<div class="empty-state">No se encontraron herramientas.</div>';
-      document.querySelector("#toolsSummary").textContent = "0 herramientas mostradas.";
+      toolsMenuItems.innerHTML = '<div class="menu-empty">No se encontraron herramientas.</div>';
       return;
     }
 
-    toolsGroups.innerHTML = Object.entries(grouped).map(([category, categoryTools]) => `
-      <section class="tool-section">
-        <div class="tool-section-header">
-          <h2>${escapeHtml(category)}</h2>
-          <span class="tool-count">${categoryTools.length}</span>
+    toolsMenuItems.innerHTML = visibleTools.map(tool => `
+      <div class="tool-menu-group">
+        <div class="tool-menu-row">
+          <button class="tool-menu-item" data-tool-id="${escapeHtml(tool.id)}" type="button" role="menuitem">
+          <span class="tool-menu-icon">${escapeHtml(tool.icon || tool.shortName?.slice(0, 1) || "T")}</span>
+          <span><strong>${escapeHtml(tool.name)}</strong><small>${escapeHtml(tool.category)}</small></span>
+          </button>
+          <button class="menu-favorite ${favorites().includes(tool.id) ? "active" : ""}" data-tool-id="${escapeHtml(tool.id)}" type="button" aria-label="${favorites().includes(tool.id) ? "Quitar de favoritos" : "Agregar a favoritos"}">${favorites().includes(tool.id) ? "★" : "☆"}</button>
         </div>
-        <div class="tool-grid">
-          ${categoryTools.map(toolCard).join("")}
-        </div>
-      </section>
+      </div>
     `).join("");
 
-    document.querySelector("#toolsSummary").textContent =
-      `${visibleTools.length} herramienta${visibleTools.length === 1 ? "" : "s"} mostrada${visibleTools.length === 1 ? "" : "s"}.`;
-
-    document.querySelectorAll(".tool-card").forEach(card => {
-      card.addEventListener("click", event => {
-        if (!event.target.closest(".favorite-button")) openTool(card.dataset.toolId);
+    toolsMenuItems.querySelectorAll(".tool-menu-item").forEach(button => {
+      button.addEventListener("click", event => {
+        if (!event.target.closest(".menu-favorite")) openTool(button.dataset.toolId);
       });
     });
-
-    document.querySelectorAll(".favorite-button").forEach(button => {
+    toolsMenuItems.querySelectorAll(".menu-favorite").forEach(button => {
       button.addEventListener("click", event => {
         event.stopPropagation();
         toggleFavorite(button.dataset.toolId);
@@ -123,27 +91,11 @@
     });
   }
 
-  function toolCard(tool) {
-    const favorite = favorites().includes(tool.id);
-    const statusClass = tool.status === "available" ? "" : tool.status === "requires" ? " requires" : tool.status === "development" ? " development" : " error";
-    return `
-      <article class="tool-card" data-tool-id="${escapeHtml(tool.id)}">
-        <div class="tool-card-top">
-          <div class="tool-icon">${escapeHtml(tool.icon || tool.shortName?.slice(0, 1) || "T")}</div>
-          <button class="favorite-button ${favorite ? "active" : ""}" data-tool-id="${escapeHtml(tool.id)}" type="button" aria-label="${favorite ? "Quitar de favoritos" : "Agregar a favoritos"}">${favorite ? "★" : "☆"}</button>
-        </div>
-        <h3>${escapeHtml(tool.name)}</h3>
-        <p>${escapeHtml(tool.description)}</p>
-        <div class="tool-meta${statusClass}"><span></span>${escapeHtml(statusLabel[tool.status] || tool.status)}</div>
-      </article>
-    `;
-  }
-
   function toggleFavorite(id) {
     const current = favorites();
     const next = current.includes(id) ? current.filter(item => item !== id) : [...current, id];
     setFavorites(next);
-    renderTools();
+    renderToolsMenu();
     if (toolView.classList.contains("hidden") === false) updateActiveFavorite(id);
     showToast(next.includes(id) ? "Herramienta agregada a favoritos." : "Herramienta quitada de favoritos.", "success");
   }
@@ -198,8 +150,7 @@
       showToast("No se pudo cargar tools.json; se usó el registro local de respaldo.", "error");
       console.warn(error);
     }
-    renderCategoryNav();
-    renderTools();
+    renderToolsMenu();
 
     const match = location.hash.match(/^#tool=([^&]+)/);
     if (match) openTool(decodeURIComponent(match[1]), false);
@@ -212,20 +163,11 @@
     if (connectionPill) connectionPill.innerHTML = `<span></span> ${online ? "Online" : "Offline"}`;
   }
 
-  function openMobileMenu() {
-    document.querySelector("#sidebar")?.classList.add("open");
-    document.querySelector("#sidebarBackdrop")?.classList.add("open");
-  }
-
-  function closeMobileMenu() {
-    document.querySelector("#sidebar")?.classList.remove("open");
-    document.querySelector("#sidebarBackdrop")?.classList.remove("open");
-  }
-
-  toolSearch.addEventListener("input", renderTools);
+  toolSearch.addEventListener("input", () => {
+    renderToolsMenu();
+    document.querySelector('[data-menu="tools"]')?.classList.add("open");
+  });
   document.querySelector("#closeTool")?.addEventListener("click", closeTool);
-  document.querySelector("#mobileMenu")?.addEventListener("click", openMobileMenu);
-  document.querySelector("#sidebarBackdrop")?.addEventListener("click", closeMobileMenu);
   document.querySelector("#reloadTools").addEventListener("click", () => {
     loadTools();
     showToast("Registro de herramientas actualizado.");
@@ -236,8 +178,7 @@
       document.querySelectorAll(".nav-item").forEach(item => item.classList.toggle("active", item === button));
       activeView = button.dataset.view;
       closeTool();
-      renderTools();
-      closeMobileMenu();
+      renderToolsMenu();
     });
   });
 
@@ -246,10 +187,33 @@
       event.preventDefault();
       toolSearch.focus();
     }
-    if (event.key === "Escape") closeMobileMenu();
+    if (event.key === "Escape") closeMenus();
   });
   window.addEventListener("online", updateConnection);
   window.addEventListener("offline", updateConnection);
+
+  function closeMenus() {
+    document.querySelectorAll(".menu.open").forEach(menu => {
+      menu.classList.remove("open");
+      menu.querySelector(".menu-trigger")?.setAttribute("aria-expanded", "false");
+    });
+  }
+
+  document.querySelectorAll(".menu-trigger").forEach(trigger => {
+    trigger.addEventListener("click", event => {
+      const menu = event.currentTarget.closest(".menu");
+      const willOpen = !menu.classList.contains("open");
+      closeMenus();
+      if (willOpen) {
+        menu.classList.add("open");
+        trigger.setAttribute("aria-expanded", "true");
+      }
+    });
+  });
+
+  document.addEventListener("click", event => {
+    if (!event.target.closest(".menu")) closeMenus();
+  });
 
   updateConnection();
   loadTools();
