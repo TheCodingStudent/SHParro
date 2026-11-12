@@ -57,7 +57,6 @@ Todas las herramientas visibles se configuran en `tools.json`. La guía completa
 - Barra lateral estilo VS Code.
 - Búsqueda con `Ctrl+K`.
 - Agrupación por categoría.
-- Favoritos persistentes en `localStorage`.
 - Estados de conexión online/offline.
 - Apertura integrada mediante iframe.
 - Apertura independiente.

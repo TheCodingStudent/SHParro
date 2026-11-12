@@ -33,15 +33,12 @@
               <div id="toolsMenuItems"></div>
             </div>
           </div>
-          <button class="nav-item" id="favoritesView" data-view="favorites" type="button">Favoritos</button>
         </nav>
         <label class="search-box" for="toolSearch">
           <span aria-hidden="true">⌕</span>
           <input id="toolSearch" type="search" placeholder="Buscar herramientas..." autocomplete="off">
-          <kbd>Ctrl K</kbd>
         </label>
         <div class="topbar-actions">
-          <button class="icon-button refresh-button" id="reloadTools" type="button" title="Actualizar herramientas" aria-label="Actualizar herramientas">↻</button>
           <a class="icon-button" id="docsLink" href="./docs/integration.html" title="Documentación">?</a>
           <span class="connection-pill" id="connectionPill"><span></span> Online</span>
         </div>
@@ -58,23 +55,11 @@
       </section>
 
       <section class="content-view hidden" id="toolView">
-        <div class="tool-toolbar">
-          <button class="tool-back" id="closeTool" type="button">← <span>Inicio</span></button>
-          <div class="tool-context">
-            <strong id="activeToolName">Herramienta</strong>
-            <span id="activeToolCategory">SHParro</span>
-          </div>
-          <div class="tool-actions">
-            <button class="icon-button" id="favoriteActive" type="button" aria-label="Agregar a favoritos">☆</button>
-            <a class="icon-button" id="openToolDirect" href="#" target="_blank" rel="noopener" aria-label="Abrir herramienta en otra pestaña">↗</a>
-          </div>
-        </div>
         <iframe id="toolFrame" title="Herramienta SHParro"></iframe>
       </section>
     </main>
   </div>
 
-  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
   <div class="toast-region" id="toastRegion" aria-live="polite"></div>
 
   <script src="./js/shparro.js?v=20261108"></script>

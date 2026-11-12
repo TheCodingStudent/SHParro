@@ -34,7 +34,7 @@ El inicio es un espacio de trabajo, no un dashboard recargado. Debe mostrar:
 - Nombre y propósito de SHParro.
 - Búsqueda como acción primaria.
 - Herramientas agrupadas por intención: coordenadas, cartografía, relieve y utilidades.
-- Favoritos como acceso rápido.
+- Herramientas accesibles desde el menubar.
 - Estado de conectividad sin convertirlo en una alerta dominante.
 
 ### Herramienta activa
@@ -125,7 +125,7 @@ Estados mínimos:
 - `focused`: anillo visible de teclado.
 - `disabled/error`: menor contraste, pero texto todavía legible.
 
-La tarjeta debe ser accionable como una unidad. El botón de favorito debe ser un control independiente y no abrir la herramienta.
+Cada entrada del menú debe ser accionable como una unidad y abrir la herramienta sin pasos intermedios.
 
 ### Botones
 

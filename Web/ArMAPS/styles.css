@@ -42,23 +42,6 @@ input {
   overflow: hidden
 }
 
-/* .armaps-topbar { position:fixed; z-index:1100; top:100px; right:var(--sidebar-width); left:0; width:auto; border-radius:0; border:0; padding-left:38px; padding-right:38px; } */
-.tool-topbar {
-  min-height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  background: linear-gradient(180deg, #000000FF 0%, #00000000 100%);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, .22);
-  backdrop-filter: blur(14px);
-}
-
-.armaps-topbar .tool-topbar-back {
-  display: none;
-}
-
 /* MAP */
 .map-area {
   position: absolute;
@@ -842,12 +825,6 @@ details summary::-webkit-details-marker {
 
 /* RESPONSIVE */
 @media(max-width:760px) {
-  .armaps-topbar {
-    right: 0;
-    padding-left: 14px;
-    padding-right: 14px
-  }
-
   .map-sidebar {
     top: auto;
     width: 100%;

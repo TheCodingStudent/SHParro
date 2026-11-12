@@ -8,12 +8,6 @@
 [hidden] { display:none !important; }
 .coordinate-fields[hidden] { display:none !important; }
 body { min-height:100vh; margin:0; background:radial-gradient(circle at 85% 4%,rgba(255,56,100,.025),transparent 28rem),var(--bg); color:var(--text); }
-.tool-topbar { position:fixed; z-index:20; top:0; right:0; left:0; min-height:48px; display:flex; align-items:center; justify-content:space-between; padding:8px 38px; border:0; border-radius:0; background:linear-gradient(180deg,#000000FF 0%,#00000000 100%); box-shadow:0 12px 28px rgba(0,0,0,.22); backdrop-filter:blur(14px); }
-.tool-topbar-brand,.tool-topbar-back { color:var(--text); text-decoration:none; }
-.tool-topbar-brand { display:flex; align-items:center; gap:8px; font-size:12px; }
-.tool-topbar-brand span { display:grid; width:26px; height:26px; place-items:center; border:1px solid rgba(255,56,100,.65); border-radius:7px; color:var(--accent); font:800 12px Consolas,monospace; }
-.tool-topbar-back { color:var(--muted); font-size:11px; }
-.tool-topbar-back:hover { color:var(--text); }
 .utility-layout { padding-top:65px; }
 main { min-width:0; padding:0 0 64px; }
 .utility-layout { width:min(1180px,calc(100% - 32px)); margin:auto; display:grid; grid-template-columns:minmax(0,1fr) 250px; gap:16px; align-items:start; }
