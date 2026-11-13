@@ -49,6 +49,22 @@ td input { min-width:130px; min-height:31px; border-color:transparent; backgroun
 @media (max-width:760px) {
   .source-tabs,.form-grid,.wcs-grid { grid-template-columns:1fr; }
   .section-heading { align-items:flex-start; flex-direction:column; }
+
+  main { width:calc(100% - 20px); padding-top:65px; }
+  header { margin-bottom:16px; }
+  header h1 { font-size:clamp(25px,8vw,32px); }
+  header p { font-size:12px; }
+  .card { padding:14px; border-radius:14px; }
+  .source-tabs { gap:6px; }
+  .section-heading { gap:8px; margin-bottom:12px; }
+  .section-heading h2 { font-size:12px; }
+  label { gap:5px; font-size:10px; }
+  input,select { min-height:36px; padding:6px 8px; font-size:12px; }
+  button,.secondary-button { min-height:38px; padding:7px 11px; font-size:12px; }
+  .notice { padding:8px 10px; font-size:10px; }
+  .result-list,.elevation-result { padding:10px; }
+  .download-item { gap:8px; padding:7px 0; font-size:11px; }
+  .elevation-value { font-size:24px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration:.01ms !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }

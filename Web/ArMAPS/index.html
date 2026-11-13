@@ -10,8 +10,9 @@
   <script src="./app.js" defer></script>
 </head>
 <body>
-  <main class="armaps-shell">
-    <aside class="map-sidebar">
+  <main class="armaps-shell sidebar-collapsed">
+    <aside class="map-sidebar collapsed" aria-label="Capas del mapa">
+      <div class="sidebar-layer-content">
       <details class="source-group layers-section">
         <summary><span>Capas INEGI</span></summary>
         <div class="source-content">
@@ -101,8 +102,18 @@
           </details>
         </div>
       </details>
+      </div>
+      <div class="layer-search" role="search">
+        <label for="layerSearch">Buscar capas</label>
+        <div class="layer-search-input">
+          <span aria-hidden="true">⌕</span>
+          <input id="layerSearch" type="search" placeholder="Fuente, WMS, vialidad, carretera..." autocomplete="off">
+          <button id="clearLayerSearch" type="button" aria-label="Limpiar búsqueda" title="Limpiar búsqueda">×</button>
+        </div>
+        <div id="layerSearchStatus" class="layer-search-status" role="status" aria-live="polite"></div>
+      </div>
     </aside>
-    <button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="Colapsar sidebar" aria-expanded="true">&#x2039;</button>
+    <button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="Expandir sidebar" aria-expanded="false">&#x203A;</button>
 
     <section class="map-area">
       <div id="map" aria-label="Mapa interactivo"></div>
@@ -112,6 +123,7 @@
         <span>EPSG:4326</span>
       </div>
       <div class="map-dock" aria-label="Controles del mapa">
+        <div id="layerSearchResults" class="layer-search-results" role="listbox" aria-label="Capas encontradas" hidden></div>
         <div class="dock-search">
           <span class="dock-search-icon" aria-hidden="true">⌕</span>
           <input id="placeSearch" type="search" placeholder="Buscar un lugar" autocomplete="off" aria-label="Buscar un lugar">

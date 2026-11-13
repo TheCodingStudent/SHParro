@@ -92,3 +92,220 @@ input:focus,select:focus { border-color:var(--accent); box-shadow:0 0 0 4px rgba
 button { border-color:var(--accent); background:rgba(0,113,227,.08); }
 button:hover:not(:disabled) { background:rgba(0,113,227,.16); }
 .primary-button { background:var(--accent); }
+
+/* Datum sidebar aligned with the ArMAPS visual system. */
+.datum-sidebar {
+  border: 1px solid rgba(60, 60, 67, .16);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, .84);
+  box-shadow: none;
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+}
+
+.datum-sidebar-header h2 {
+  color: #1d1d1f;
+  font-weight: 650;
+  letter-spacing: -.02em;
+}
+
+.datum-select-label {
+  color: #6e6e73;
+  font-weight: 600;
+}
+
+.datum-summary {
+  border-top-color: rgba(60, 60, 67, .16);
+}
+
+.datum-summary strong {
+  color: #1d1d1f;
+}
+
+.datum-summary p,
+.datum-summary dt {
+  color: #6e6e73;
+}
+
+.datum-summary dd {
+  color: #3a3a3c;
+}
+
+.mobile-converter-card {
+  display: contents;
+}
+
+.mobile-tool-tabs {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .utility-layout main {
+    display: contents;
+  }
+
+  .utility-layout header {
+    grid-column: 1;
+    grid-row: 1;
+    margin-bottom: 14px;
+  }
+
+  .utility-layout .datum-sidebar {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .utility-layout .mode-tabs {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .utility-layout .mobile-converter-card {
+    grid-column: 1;
+    grid-row: 4;
+  }
+
+  .utility-layout {
+    width: calc(100% - 20px);
+    gap: 12px;
+  }
+
+  .datum-sidebar {
+    width: 100%;
+    margin-top: 0;
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .datum-sidebar-header h2 {
+    margin: 4px 0 12px;
+    font-size: 13px;
+  }
+
+  .datum-select-label {
+    gap: 6px;
+    font-size: 10px;
+  }
+
+  .datum-summary {
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+
+  .mobile-converter-card {
+    display: block;
+    overflow: hidden;
+    border: 1px solid rgba(60, 60, 67, .16);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, .84);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, .14), 0 2px 8px rgba(0, 0, 0, .06);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+  }
+
+  .mobile-tool-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    padding: 6px;
+    border-bottom: 1px solid rgba(60, 60, 67, .12);
+  }
+
+  .mobile-tool-tabs button {
+    min-height: 36px;
+    border: 0;
+    border-radius: 9px;
+    padding: 6px 7px;
+    background: transparent;
+    color: #6e6e73;
+    font-size: 11px;
+    line-height: 1.2;
+  }
+
+  .card {
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+
+  .section-heading {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .section-heading h2 {
+    font-size: 12px;
+  }
+
+  .mode-tabs,
+  .coordinate-input-grid,
+  .coordinate-input-grid:has(.geographic-fields:not([hidden])),
+  .utm-fields,
+  .geographic-fields {
+    gap: 8px;
+  }
+
+  label {
+    gap: 5px;
+    font-size: 10px;
+  }
+
+  input,
+  select {
+    min-height: 36px;
+    border-radius: 9px;
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  button {
+    min-height: 38px;
+    border-radius: 9px;
+    padding: 7px 11px;
+    font-size: 12px;
+  }
+
+  .table-actions {
+    gap: 6px;
+  }
+
+  .output-actions,
+  #batchResultWrap {
+    margin-top: 10px;
+  }
+
+  .mobile-tool-tabs button.active {
+    background: rgba(0, 113, 227, .1);
+    color: #0071e3;
+  }
+
+  .mobile-tool-panel {
+    display: none;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .mobile-tool-panel.is-mobile-active {
+    display: block;
+  }
+
+  .mobile-tool-panel[data-mobile-panel-content="single"] .section-heading {
+    display: none;
+  }
+
+  .mobile-tool-panel[data-mobile-panel-content="batch"] .section-heading > div:first-child {
+    display: none;
+  }
+
+  .mobile-tool-panel[data-mobile-panel-content="batch"] .section-heading {
+    margin-bottom: 12px;
+  }
+
+  header { margin-bottom:16px; }
+  header h1 { font-size:clamp(25px,8vw,32px); }
+  header p { font-size:12px; }
+  .mode-tabs { gap:6px; }
+  .mode-tabs button { min-height:38px; padding:7px 10px; font-size:12px; }
+}

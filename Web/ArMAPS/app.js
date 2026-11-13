@@ -1,4 +1,5 @@
 const MEXICO_CENTER = [23.8, -102.5];
+const MOBILE_MEXICO_CENTER = [23.6345, -102.5528];
 const INEGI_WMS = "https://gaia.inegi.org.mx/geoserver/wms";
 const INEGI_MDM61_WMS = "https://gaia.inegi.org.mx/NLB/tunnel/wms/wms61?";
 
@@ -39,6 +40,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
         const text = document.createElement("span");
         text.textContent = title || name;
+        label.dataset.keywords = `INEGI Mapa Digital v6.1 WMS ${name} ${title || ""}`;
         label.append(input, text);
         mdm61LayerList.appendChild(label);
       });
@@ -47,6 +49,8 @@ window.addEventListener("DOMContentLoaded", () => {
       inegiServiceStatus.textContent = `Servicio INEGI disponible · ${names.size} capas`;
       inegiServiceStatus.className = "service-status available";
       bindMdm61Rows();
+      filterLayers();
+      renderLayerSuggestions();
     } catch {
       inegiServiceStatus.textContent = "Servicio INEGI no disponible actualmente";
       inegiServiceStatus.className = "service-status unavailable";
@@ -81,6 +85,9 @@ window.addEventListener("DOMContentLoaded", () => {
     minZoom: 3,
     zoomControl: false
   });
+  if (window.matchMedia("(max-width: 760px)").matches) {
+    map.setView(MOBILE_MEXICO_CENTER, 5.25, { animate: false });
+  }
   map.createPane("wms-overlay");
   map.getPane("wms-overlay").style.zIndex = 450;
 
@@ -88,12 +95,17 @@ window.addEventListener("DOMContentLoaded", () => {
   const basemapPicker = document.querySelector(".basemap-picker");
   const mapArea = document.querySelector(".map-area");
   const sidebarToggle = document.querySelector("#sidebarToggle");
-  sidebarToggle?.addEventListener("click", () => {
-    const collapsed = sidebar.classList.toggle("collapsed");
+  function setSidebarCollapsed(collapsed) {
+    sidebar.classList.toggle("collapsed", collapsed);
     document.querySelector(".armaps-shell")?.classList.toggle("sidebar-collapsed", collapsed);
     sidebarToggle.setAttribute("aria-expanded", String(!collapsed));
     sidebarToggle.setAttribute("aria-label", collapsed ? "Expandir sidebar" : "Colapsar sidebar");
     sidebarToggle.textContent = collapsed ? "\u203A" : "\u2039";
+  }
+  setSidebarCollapsed(true);
+  sidebarToggle?.addEventListener("click", () => {
+    const collapsed = !sidebar.classList.contains("collapsed");
+    setSidebarCollapsed(collapsed);
     window.setTimeout(() => map.invalidateSize(), 260);
   });
 
@@ -248,6 +260,48 @@ window.addEventListener("DOMContentLoaded", () => {
     input.addEventListener("change", handleWmsLayerChange);
   });
 
+  const layerSearch = document.querySelector("#layerSearch");
+  const clearLayerSearch = document.querySelector("#clearLayerSearch");
+  const layerSearchStatus = document.querySelector("#layerSearchStatus");
+  function normalizeSearchText(value) {
+    return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  }
+  function filterLayers() {
+    const query = normalizeSearchText(layerSearch.value.trim());
+    const terms = query.split(/\s+/).filter(Boolean);
+    let visibleCount = 0;
+    document.querySelectorAll(".layer-row").forEach(row => {
+      const input = row.querySelector("input[data-layer]");
+      const layerGroup = row.closest(".layer-group");
+      const sourceGroup = row.closest(".source-group");
+      const sourceName = sourceGroup?.querySelector(":scope > summary")?.textContent || "";
+      const groupName = layerGroup?.querySelector(":scope > summary")?.textContent || "";
+      const provider = input?.dataset.wms || input?.dataset.wmts || "";
+      const serviceType = input?.dataset.wmts ? "wmts teselada" : "wms servicio mapa web";
+      const haystack = normalizeSearchText(`${row.textContent} ${row.dataset.keywords || ""} ${sourceName} ${groupName} ${provider} ${input?.dataset.layer || ""} ${serviceType}`);
+      const matches = !terms.length || terms.every(term => haystack.includes(term));
+      row.hidden = !matches;
+      if (matches) visibleCount += 1;
+    });
+    document.querySelectorAll(".layer-group").forEach(group => {
+      const hasVisibleRows = [...group.querySelectorAll(".layer-row")].some(row => !row.hidden);
+      group.hidden = Boolean(terms.length && !hasVisibleRows);
+      if (terms.length && hasVisibleRows) group.open = true;
+    });
+    document.querySelectorAll(".source-group").forEach(source => {
+      const hasVisibleRows = [...source.querySelectorAll(".layer-row")].some(row => !row.hidden);
+      source.hidden = Boolean(terms.length && !hasVisibleRows);
+      if (terms.length && hasVisibleRows) source.open = true;
+    });
+    layerSearchStatus.textContent = terms.length ? `${visibleCount} capa${visibleCount === 1 ? "" : "s"} encontrada${visibleCount === 1 ? "" : "s"}` : "";
+  }
+  layerSearch.addEventListener("input", filterLayers);
+  clearLayerSearch.addEventListener("click", () => {
+    layerSearch.value = "";
+    filterLayers();
+    layerSearch.focus();
+  });
+
   map.on("mousemove", event => {
     document.querySelector("#coordinates").textContent =
       `Lat ${event.latlng.lat.toFixed(5)} · Lon ${event.latlng.lng.toFixed(5)}`;
@@ -322,6 +376,104 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const searchInput = document.querySelector("#placeSearch");
   const searchStatus = document.querySelector("#searchStatus");
+  const layerSearchResults = document.querySelector("#layerSearchResults");
+  const hiddenLayerSuggestions = new Set();
+
+  function getLayerSearchHaystack(row, input) {
+    const layerGroup = row.closest(".layer-group");
+    const sourceGroup = row.closest(".source-group");
+    const sourceName = sourceGroup?.querySelector(":scope > summary")?.textContent || "";
+    const groupName = layerGroup?.querySelector(":scope > summary")?.textContent || "";
+    const provider = input.dataset.wms || input.dataset.wmts || "";
+    const serviceType = input.dataset.wmts ? "wmts teselada" : "wms servicio mapa web";
+    return normalizeSearchText(`${row.textContent} ${row.dataset.keywords || ""} ${sourceName} ${groupName} ${provider} ${input.dataset.layer || ""} ${serviceType}`);
+  }
+
+  function getLayerKey(input) {
+    return `${input.dataset.wmts || input.dataset.wms || INEGI_WMS}|${input.dataset.layer}`;
+  }
+
+  function setLayerFromSuggestion(input, enabled) {
+    input.checked = enabled;
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+
+  function renderLayerSuggestions() {
+    const query = normalizeSearchText(searchInput.value.trim());
+    if (!query) {
+      layerSearchResults.hidden = true;
+      layerSearchResults.replaceChildren();
+      searchInput.removeAttribute("aria-expanded");
+      return;
+    }
+
+    const terms = query.split(/\s+/).filter(Boolean);
+    const matches = [...document.querySelectorAll(".layer-row")]
+      .map(row => ({ row, input: row.querySelector("input[data-layer]") }))
+      .filter(item => item.input)
+      .filter(item => !hiddenLayerSuggestions.has(getLayerKey(item.input)))
+      .filter(item => terms.every(term => getLayerSearchHaystack(item.row, item.input).includes(term)));
+
+    layerSearchResults.replaceChildren();
+    matches.forEach(({ row, input }) => {
+      const option = document.createElement("div");
+      option.className = "layer-search-option";
+      option.setAttribute("role", "option");
+      const title = row.querySelector("span:not(.layer-state):not(.layer-type-badge)")?.textContent.trim() || input.dataset.layer;
+      const source = row.closest(".source-group")?.querySelector(":scope > summary")?.textContent.trim() || "Capa";
+      const service = input.dataset.wmts ? "WMTS" : "WMS";
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = input.checked;
+      checkbox.setAttribute("aria-label", `${input.checked ? "Desactivar" : "Activar"} ${title}`);
+      checkbox.addEventListener("change", () => setLayerFromSuggestion(input, checkbox.checked));
+
+      const details = document.createElement("span");
+      details.className = "layer-search-option-details";
+      const titleElement = document.createElement("strong");
+      titleElement.textContent = title;
+      const sourceElement = document.createElement("small");
+      sourceElement.textContent = `${source} · ${service}`;
+      details.append(titleElement, sourceElement);
+
+      const dismiss = document.createElement("button");
+      dismiss.type = "button";
+      dismiss.className = "layer-search-dismiss";
+      dismiss.setAttribute("aria-label", `Ocultar ${title}`);
+      dismiss.title = "Ocultar esta sugerencia hasta una nueva búsqueda";
+      dismiss.textContent = "×";
+      dismiss.addEventListener("click", () => {
+        hiddenLayerSuggestions.add(getLayerKey(input));
+        renderLayerSuggestions();
+      });
+
+      option.append(checkbox, details, dismiss);
+      layerSearchResults.appendChild(option);
+    });
+
+    layerSearchResults.hidden = !matches.length;
+    searchInput.setAttribute("aria-expanded", String(Boolean(matches.length)));
+  }
+
+  searchInput.addEventListener("input", () => {
+    if (!searchInput.value.trim()) hiddenLayerSuggestions.clear();
+    renderLayerSuggestions();
+  });
+  document.addEventListener("pointerdown", event => {
+    if (layerSearchResults.hidden) return;
+    const target = event.target;
+    if (!(target instanceof Element) || !target.closest("#layerSearchResults")) {
+      layerSearchResults.hidden = true;
+      searchInput.removeAttribute("aria-expanded");
+    }
+  });
+  document.addEventListener("pointerdown", event => {
+    if (!basemapPicker?.open) return;
+    const target = event.target;
+    if (!(target instanceof Element) || !target.closest(".basemap-picker")) {
+      basemapPicker.removeAttribute("open");
+    }
+  });
   async function searchPlace() {
     const query = searchInput.value.trim();
     if (!query) return;

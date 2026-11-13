@@ -1,11 +1,20 @@
 const PRECISION = 6;
 const modeButtons = [...document.querySelectorAll("[data-mode]")];
+const mobilePanelButtons = [...document.querySelectorAll("[data-mobile-panel]")];
+const mobilePanels = [...document.querySelectorAll("[data-mobile-panel-content]")];
 const sheetRows = document.querySelector("#sheetRows");
 const resultRows = document.querySelector("#resultRows");
 const messages = document.querySelector("#messages");
 let mode = "utm-geographic";
 let sheet = [{a:"", b:""}];
 let batchResults = [];
+
+function setMobilePanel(panel) {
+  mobilePanelButtons.forEach(button => button.classList.toggle("active", button.dataset.mobilePanel === panel));
+  mobilePanels.forEach(section => section.classList.toggle("is-mobile-active", section.dataset.mobilePanelContent === panel));
+}
+
+mobilePanelButtons.forEach(button => button.addEventListener("click", () => setMobilePanel(button.dataset.mobilePanel)));
 
 const DATUMS = {
   wgs84:{name:"WGS84",ellipsoid:"GRS80 / WGS84",axes:"a = 6 378 137 m",flattening:"1 / 298.257223563",epoch:"Fijo",note:"Marco mundial compatible con GNSS moderno."},

@@ -1711,6 +1711,97 @@ details summary::-webkit-details-marker {
   top: 10px;
   border-top-right-radius: 0;
   background: rgba(255, 255, 255, .84);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-layer-content {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+}
+
+.layer-search {
+  flex: 0 0 auto;
+  padding: 12px 10px 14px;
+  border-top: 1px solid var(--line);
+  background: transparent;
+}
+
+.layer-search > label {
+  display: block;
+  margin-bottom: 8px;
+  color: #6e6e73;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+
+.layer-search-input {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 42px;
+  padding: 0 10px;
+  border: 1px solid rgba(60, 60, 67, .16);
+  border-radius: 12px;
+  background: rgba(245, 245, 247, .9);
+  color: #6e6e73;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .8);
+}
+
+.layer-search-input:focus-within {
+  border-color: rgba(0, 113, 227, .5);
+  box-shadow: 0 0 0 4px rgba(0, 113, 227, .12);
+}
+
+.layer-search-input input {
+  min-width: 0;
+  flex: 1;
+  height: 38px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #1d1d1f;
+  font-size: 13px;
+}
+
+.layer-search-input input::placeholder {
+  color: #8e8e93;
+}
+
+.layer-search-input button {
+  width: 24px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: 8px;
+  color: #6e6e73;
+  font-size: 21px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.layer-search-input button:hover {
+  background: rgba(0, 113, 227, .1);
+  color: #0071e3;
+}
+
+.layer-search-status {
+  min-height: 15px;
+  margin-top: 6px;
+  color: #6e6e73;
+  font-size: 10px;
+}
+
+.layer-row[hidden],
+.layer-group[hidden],
+.source-group[hidden] {
+  display: none;
 }
 
 @media (max-width: 760px) {
@@ -1894,5 +1985,211 @@ details summary::-webkit-details-marker {
   .locate-button {
     right: 14px;
     bottom: calc(52vh + 12px);
+  }
+}
+
+/* Mobile layout: bottom sheet without changing the desktop arrangement. */
+@media (max-width: 760px) {
+  :root {
+    --armaps-mobile-sidebar-height: 46vh;
+  }
+
+  .map-sidebar {
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    height: var(--armaps-mobile-sidebar-height);
+    border-radius: 24px 24px 0 0;
+  }
+
+  .sidebar-toggle {
+    top: 10px;
+    right: 0;
+    bottom: auto;
+    left: auto;
+  }
+
+  .armaps-shell:not(.sidebar-collapsed) .sidebar-toggle {
+    top: auto;
+    right: 0;
+    bottom: calc(var(--armaps-mobile-sidebar-height) - 42px);
+    left: auto;
+    border-radius: 12px 0 0 0;
+  }
+
+  .armaps-shell.sidebar-collapsed .sidebar-toggle {
+    top: 10px;
+    right: auto;
+    bottom: auto;
+    left: 0;
+    border-radius: 0 12px 12px 0;
+  }
+
+  .map-dock,
+  .map-status,
+  .basemap-picker,
+  .leaflet-top.leaflet-left {
+    bottom: 18px;
+  }
+
+  .armaps-shell:not(.sidebar-collapsed) .map-dock,
+  .armaps-shell:not(.sidebar-collapsed) .map-status,
+  .armaps-shell:not(.sidebar-collapsed) .basemap-picker,
+  .armaps-shell:not(.sidebar-collapsed) .leaflet-top.leaflet-left {
+    bottom: calc(var(--armaps-mobile-sidebar-height) + 12px);
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --armaps-mobile-sidebar-height: 52vh;
+  }
+
+  .map-sidebar {
+    height: var(--armaps-mobile-sidebar-height);
+  }
+}
+
+/* Layer results from the dynamic island. */
+.layer-search-results {
+  position: absolute;
+  z-index: 4;
+  right: 0;
+  bottom: calc(100% + 10px);
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  max-height: 176px;
+  overflow-y: auto;
+  padding: 6px;
+  border: 1px solid rgba(60, 60, 67, .16);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .96);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, .16), 0 2px 8px rgba(0, 0, 0, .06);
+  backdrop-filter: blur(24px) saturate(145%);
+  -webkit-backdrop-filter: blur(24px) saturate(145%);
+  scrollbar-width: thin;
+}
+
+.layer-search-results[hidden] {
+  display: none;
+}
+
+.layer-search-option {
+  min-height: 52px;
+  flex: 0 0 52px;
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) 26px;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #1d1d1f;
+  text-align: left;
+}
+
+.layer-search-option:hover,
+.layer-search-option:focus-visible {
+  background: rgba(0, 113, 227, .09);
+  outline: 0;
+}
+
+.layer-search-option > input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: #0071e3;
+  cursor: pointer;
+}
+
+.layer-search-option-details {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.layer-search-option strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.layer-search-option small {
+  overflow: hidden;
+  color: #6e6e73;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.layer-search-dismiss {
+  width: 24px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #6e6e73;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.layer-search-dismiss:hover,
+.layer-search-dismiss:focus-visible {
+  background: rgba(0, 113, 227, .1);
+  color: #0071e3;
+  outline: 0;
+}
+
+@media (max-width: 760px) {
+  .map-sidebar,
+  .sidebar-toggle {
+    display: none !important;
+  }
+
+  .location-status {
+    top: auto;
+    right: 12px;
+    bottom: 84px;
+    left: auto;
+    max-width: min(260px, calc(100% - 24px));
+    padding: 6px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    line-height: 1.25;
+  }
+
+  .layer-search-results {
+    max-height: 176px;
+  }
+}
+
+@media (max-width: 760px) {
+  .map-sidebar button,
+  .map-sidebar input,
+  .map-sidebar select {
+    font-size: 12px;
+  }
+
+  .map-sidebar button {
+    min-height: 38px;
+  }
+
+  .map-sidebar input,
+  .map-sidebar select {
+    min-height: 36px;
+  }
+
+  .map-dock button {
+    font-size: 12px;
   }
 }

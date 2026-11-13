@@ -86,7 +86,14 @@
     if (updateHistory) history.replaceState(null, "", `#tool=${encodeURIComponent(id)}`);
   }
 
-  toolFrame.addEventListener("load", () => toolFrame.classList.add("loaded"));
+  toolFrame.addEventListener("load", () => {
+    toolFrame.classList.add("loaded");
+    try {
+      toolFrame.contentDocument?.addEventListener("pointerdown", closeMenus);
+    } catch {
+      // Un iframe de otro origen no permite acceder a su documento interno.
+    }
+  });
 
   async function loadTools() {
     try {
@@ -150,9 +157,12 @@
     });
   });
 
-  document.addEventListener("click", event => {
-    if (!event.target.closest(".menu")) closeMenus();
-  });
+  function closeMenusWhenOutside(event) {
+    const target = event.target;
+    if (!(target instanceof Element) || !target.closest(".menu")) closeMenus();
+  }
+
+  document.addEventListener("pointerdown", closeMenusWhenOutside);
 
   updateConnection();
   loadTools();

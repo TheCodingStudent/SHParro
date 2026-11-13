@@ -20,10 +20,15 @@
       <button type="button" data-mode="geographic-utm">Geográficas a UTM</button>
     </nav>
 
-    <section class="card">
+    <div class="mobile-converter-card">
+    <nav class="mobile-tool-tabs" aria-label="Sección del conversor">
+      <button class="active" type="button" data-mobile-panel="single">Coordenadas individuales</button>
+      <button type="button" data-mobile-panel="batch">Hoja de coordenadas</button>
+    </nav>
+
+    <section class="card mobile-tool-panel is-mobile-active" data-mobile-panel-content="single">
       <div class="section-heading">
         <div>
-          <span class="step-label">Paso 1</span>
           <h2>Coordenadas individuales</h2>
         </div>
       </div>
@@ -59,10 +64,9 @@
       <div class="result-panel" id="singleResult" hidden></div>
     </section>
 
-    <section class="card">
+    <section class="card mobile-tool-panel" data-mobile-panel-content="batch">
       <div class="section-heading">
         <div>
-          <span class="step-label">Paso 2</span>
           <h2>Hoja de coordenadas</h2>
         </div>
         <div class="table-actions">
@@ -90,6 +94,7 @@
       </div>
       <div id="messages" role="status" aria-live="polite"></div>
     </section>
+    </div>
   </main>
   <aside class="datum-sidebar">
     <div class="datum-sidebar-header">
