@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#18181b">
+  <meta name="theme-color" content="#f5f5f7">
   <meta name="description" content="SHParro: área personal para herramientas web geoespaciales y utilidades.">
-  <title>SHParro</title>
+  <title>SHParro — Herramientas geoespaciales</title>
   <link rel="stylesheet" href="./css/shparro.css?v=20261108">
 </head>
 <body>
@@ -13,7 +13,7 @@
     <main class="main">
       <header class="topbar">
         <a class="brand" href="./index.html" aria-label="Inicio de SHParro">
-          <span class="brand-mark">S</span><strong>SHParro</strong>
+          <span class="brand-mark">SH</span><strong>SHParro</strong>
         </a>
         <nav class="menubar" aria-label="Menú principal">
           <div class="menu" data-menu="file">
@@ -46,16 +46,17 @@
 
       <section class="content-view" id="homeView">
         <div class="welcome-screen">
-          <div class="home-logo" aria-hidden="true">S</div>
+          <div class="home-logo" aria-hidden="true">SH</div>
           <span class="eyebrow">Área personal</span>
           <h1>Explora el territorio<br><em>con precisión.</em></h1>
           <p>Un espacio para transformar coordenadas, consultar relieve y trabajar con información geoespacial.</p>
-          <div class="welcome-hint">Abre <strong>Herramientas</strong> para comenzar.</div>
+          <button class="welcome-action" id="openToolsButton" type="button">Explorar herramientas <span aria-hidden="true">→</span></button>
+          <div class="welcome-hint">También puedes usar el menú superior.</div>
         </div>
       </section>
 
       <section class="content-view hidden" id="toolView">
-        <iframe id="toolFrame" title="Herramienta SHParro"></iframe>
+        <iframe id="toolFrame" title="Herramienta SHParro" allow="geolocation"></iframe>
       </section>
     </main>
   </div>

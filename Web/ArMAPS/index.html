@@ -12,26 +12,8 @@
 <body>
   <main class="armaps-shell">
     <aside class="map-sidebar">
-      <button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="Colapsar sidebar" aria-expanded="true">&#x2039;</button>
-      <header class="brand-header">
-        <div class="brand-mark">A</div>
-        <div>
-          <span>SHParro</span>
-          <strong>ArMAPS</strong>
-        </div>
-      </header>
-
-      <div class="sidebar-section">
-        <label for="placeSearch">Ir a un lugar</label>
-        <div class="search-row">
-          <input id="placeSearch" type="search" placeholder="Ciudad, municipio, lugar..." autocomplete="off">
-          <button id="searchButton" class="icon-button" type="button" aria-label="Buscar">⌕</button>
-        </div>
-        <div id="searchStatus" class="search-status" role="status"></div>
-      </div>
-
       <details class="source-group layers-section">
-        <summary><span>Capas INEGI</span><span class="source-badge">WMS</span></summary>
+        <summary><span>Capas INEGI</span></summary>
         <div class="source-content">
           <div id="inegiServiceStatus" class="service-status" role="status">Comprobando servicio INEGI...</div>
           <details class="layer-group">
@@ -68,7 +50,7 @@
       </details>
 
       <details class="source-group layers-section">
-        <summary><span>Divisiones</span><span class="source-badge">INEGI / CONABIO</span></summary>
+        <summary><span>Divisiones</span></summary>
         <div class="source-content">
           <details class="layer-group">
             <summary>División política</summary>
@@ -86,7 +68,7 @@
       </details>
 
       <details class="source-group layers-section">
-        <summary><span>Imágenes satelitales</span><span class="source-badge">NASA</span></summary>
+        <summary><span>Imágenes satelitales</span></summary>
         <div class="source-content">
           <details class="layer-group">
             <summary>NASA GIBS</summary>
@@ -99,7 +81,7 @@
       </details>
 
       <details class="source-group layers-section">
-        <summary><span>Topografía externa</span><span class="source-badge">WMS</span></summary>
+        <summary><span>Topografía externa</span></summary>
         <div class="source-content">
           <details class="layer-group">
             <summary>terrestris / SRTM</summary>
@@ -111,7 +93,7 @@
       </details>
 
       <details class="source-group layers-section">
-        <summary><span>Capas teseladas</span><span class="source-badge">WMTS</span></summary>
+        <summary><span>Capas teseladas</span></summary>
         <div class="source-content">
           <details class="layer-group">
             <summary>NASA GIBS</summary>
@@ -120,25 +102,38 @@
         </div>
       </details>
     </aside>
+    <button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="Colapsar sidebar" aria-expanded="true">&#x2039;</button>
 
     <section class="map-area">
       <div id="map" aria-label="Mapa interactivo"></div>
-      <button id="locateButton" class="locate-button" type="button" aria-label="Centrar en mi ubicación GPS" title="Mi ubicación GPS">⌾</button>
       <div id="locationStatus" class="location-status" role="status" aria-live="polite"></div>
-      <details class="basemap-picker">
-        <summary><span class="basemap-icon">▧</span><span id="activeBasemapName">Calles</span><span class="chevron">⌄</span></summary>
-        <div class="basemap-grid" role="radiogroup" aria-label="Mapa base">
-          <button class="basemap-option active" type="button" data-basemap="streets"><span class="basemap-preview streets"></span><span>Calles</span></button>
-          <button class="basemap-option" type="button" data-basemap="light"><span class="basemap-preview light"></span><span>Claro</span></button>
-          <button class="basemap-option" type="button" data-basemap="dark"><span class="basemap-preview dark"></span><span>Oscuro</span></button>
-          <button class="basemap-option" type="button" data-basemap="satellite"><span class="basemap-preview satellite"></span><span>Satélite</span></button>
-          <button class="basemap-option" type="button" data-basemap="topographic"><span class="basemap-preview topographic"></span><span>Topográfico</span></button>
-          <button class="basemap-option" type="button" data-basemap="terrain"><span class="basemap-preview terrain"></span><span>Relieve</span></button>
-        </div>
-      </details>
       <div class="map-status">
         <span id="coordinates">Lat 19.4326 · Lon -99.1332</span>
         <span>EPSG:4326</span>
+      </div>
+      <div class="map-dock" aria-label="Controles del mapa">
+        <div class="dock-search">
+          <span class="dock-search-icon" aria-hidden="true">⌕</span>
+          <input id="placeSearch" type="search" placeholder="Buscar un lugar" autocomplete="off" aria-label="Buscar un lugar">
+          <button id="searchButton" class="dock-search-button" type="button" aria-label="Buscar">Ir</button>
+        </div>
+        <div class="dock-zoom" aria-label="Zoom del mapa">
+          <button id="zoomOutButton" type="button" aria-label="Alejar mapa">−</button>
+          <button id="zoomInButton" type="button" aria-label="Acercar mapa">+</button>
+        </div>
+        <details class="basemap-picker">
+          <summary><span class="basemap-icon">▧</span><span id="activeBasemapName">Calles</span><span class="chevron">⌄</span></summary>
+          <div class="basemap-grid" role="radiogroup" aria-label="Mapa base">
+            <button class="basemap-option active" type="button" data-basemap="streets"><span class="basemap-preview streets"></span><span>Calles</span></button>
+            <button class="basemap-option" type="button" data-basemap="light"><span class="basemap-preview light"></span><span>Claro</span></button>
+            <button class="basemap-option" type="button" data-basemap="dark"><span class="basemap-preview dark"></span><span>Oscuro</span></button>
+            <button class="basemap-option" type="button" data-basemap="satellite"><span class="basemap-preview satellite"></span><span>Satélite</span></button>
+            <button class="basemap-option" type="button" data-basemap="topographic"><span class="basemap-preview topographic"></span><span>Topográfico</span></button>
+            <button class="basemap-option" type="button" data-basemap="terrain"><span class="basemap-preview terrain"></span><span>Relieve</span></button>
+          </div>
+        </details>
+        <button id="locateButton" class="locate-button" type="button" aria-label="Centrar en mi ubicación GPS" title="Mi ubicación GPS">⌾</button>
+        <div id="searchStatus" class="search-status" role="status"></div>
       </div>
     </section>
   </main>

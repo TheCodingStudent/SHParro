@@ -115,6 +115,12 @@
     renderToolsMenu();
     document.querySelector('[data-menu="tools"]')?.classList.add("open");
   });
+  document.querySelector("#openToolsButton")?.addEventListener("click", event => {
+    event.stopPropagation();
+    const toolsMenu = document.querySelector('[data-menu="tools"]');
+    toolsMenu?.classList.add("open");
+    toolsMenu?.querySelector(".menu-trigger")?.setAttribute("aria-expanded", "true");
+  });
   document.addEventListener("keydown", event => {
     if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
       event.preventDefault();

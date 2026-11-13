@@ -55,8 +55,23 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function bindMdm61Rows() {
+    decorateLayerTypes(mdm61LayerList);
     mdm61LayerList.querySelectorAll("[data-layer]").forEach(input => {
       input.addEventListener("change", handleWmsLayerChange);
+    });
+  }
+
+  function decorateLayerTypes(root = document) {
+    root.querySelectorAll(".layer-row").forEach(row => {
+      const input = row.querySelector("input[data-layer]");
+      if (!input || row.querySelector(".layer-type-badge")) return;
+      const badge = document.createElement("span");
+      const isWmts = Boolean(input.dataset.wmts);
+      badge.className = "layer-type-badge";
+      badge.textContent = isWmts ? "WMTS" : "WMS";
+      badge.title = isWmts ? "Web Map Tile Service" : "Web Map Service";
+      badge.setAttribute("aria-label", badge.title);
+      input.before(badge);
     });
   }
 
@@ -64,7 +79,7 @@ window.addEventListener("DOMContentLoaded", () => {
     center: MEXICO_CENTER,
     zoom: 5,
     minZoom: 3,
-    zoomControl: true
+    zoomControl: false
   });
   map.createPane("wms-overlay");
   map.getPane("wms-overlay").style.zIndex = 450;
@@ -75,6 +90,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const sidebarToggle = document.querySelector("#sidebarToggle");
   sidebarToggle?.addEventListener("click", () => {
     const collapsed = sidebar.classList.toggle("collapsed");
+    document.querySelector(".armaps-shell")?.classList.toggle("sidebar-collapsed", collapsed);
     sidebarToggle.setAttribute("aria-expanded", String(!collapsed));
     sidebarToggle.setAttribute("aria-label", collapsed ? "Expandir sidebar" : "Colapsar sidebar");
     sidebarToggle.textContent = collapsed ? "\u203A" : "\u2039";
@@ -119,16 +135,18 @@ window.addEventListener("DOMContentLoaded", () => {
   };
   let activeBase = baseMaps.streets.addTo(map);
 
-  function updateSidebarTone(baseMapName) {
-    const darkMap = ["satellite", "dark"].includes(baseMapName);
-    sidebar?.classList.toggle("light-text", darkMap);
-    sidebar?.classList.toggle("dark-text", !darkMap);
-    basemapPicker?.classList.toggle("light-text", darkMap);
-    basemapPicker?.classList.toggle("dark-text", !darkMap);
-    mapArea?.classList.toggle("light-text", darkMap);
-    mapArea?.classList.toggle("dark-text", !darkMap);
+  function updateSidebarTone() {
+    sidebar?.classList.remove("light-text");
+    sidebar?.classList.add("dark-text");
+    basemapPicker?.classList.remove("light-text");
+    basemapPicker?.classList.add("dark-text");
+    mapArea?.classList.remove("light-text");
+    mapArea?.classList.add("dark-text");
   }
-  updateSidebarTone("streets");
+  updateSidebarTone();
+
+  document.querySelector("#zoomInButton")?.addEventListener("click", () => map.zoomIn());
+  document.querySelector("#zoomOutButton")?.addEventListener("click", () => map.zoomOut());
 
   const wmsLayers = new Map();
   function setWmsOpacity(opacity) {
@@ -142,7 +160,7 @@ window.addEventListener("DOMContentLoaded", () => {
       activeBase = baseMaps[button.dataset.basemap];
       activeBase.addTo(map);
       document.querySelector("#activeBasemapName").textContent = button.querySelector("span:last-child").textContent;
-      updateSidebarTone(button.dataset.basemap);
+      updateSidebarTone();
     });
   });
 
@@ -225,6 +243,7 @@ window.addEventListener("DOMContentLoaded", () => {
       }
   }
 
+  decorateLayerTypes();
   document.querySelectorAll("[data-layer]").forEach(input => {
     input.addEventListener("change", handleWmsLayerChange);
   });
@@ -267,7 +286,7 @@ window.addEventListener("DOMContentLoaded", () => {
         locateButton.classList.remove("loading");
         locateButton.classList.add("active");
         locateButton.removeAttribute("aria-busy");
-        map.flyTo(latLng, Math.max(map.getZoom(), 16), { duration: 1.2 });
+        map.setView(latLng, Math.max(map.getZoom(), 16), { animate: true, duration: 1.2 });
 
         if (locationMarker) map.removeLayer(locationMarker);
         if (locationAccuracy) map.removeLayer(locationAccuracy);
@@ -297,7 +316,7 @@ window.addEventListener("DOMContentLoaded", () => {
         };
         showLocationStatus(messages[error.code] || "No fue posible obtener la ubicación.");
       },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 }
+      { enableHighAccuracy: true, timeout: 30000, maximumAge: 0 }
     );
   });
 
