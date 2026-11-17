@@ -1,245 +1,194 @@
 # Guía de diseño visual e interacción de SHParro
 
-## Propósito
+Esta guía define la filosofía visual y de interacción vigente de SHParro. Es la referencia para la shell principal y para las herramientas integradas dentro de [Web/](../Web/).
 
-Esta guía define el lenguaje visual y de interacción para transformar SHParro en una plataforma geoespacial directa, calmada y física. La referencia es la filosofía de las interfaces fluidas de Apple, adaptada a web Vanilla: claridad, respuesta inmediata, continuidad espacial, materiales ligeros y animaciones interrumpibles.
+## 1. Filosofía de producto
 
-La guía aplica a la shell principal descrita en [`index.html`](../index.html), su lógica de navegación en [`js/shparro.js`](../js/shparro.js) y las herramientas integradas dentro de [`Web/`](../Web/).
+SHParro debe sentirse como una herramienta geoespacial técnica, clara y tranquila: precisa sin parecer industrial, visualmente ligera y directa en cada tarea.
 
-## 1. Principios de producto
+Cada interacción debe favorecer al menos una de estas cualidades:
 
-Cada interacción debe servir al menos una de estas necesidades:
-
-- **Seguridad:** el usuario siempre sabe qué está activo, qué puede deshacer y dónde volver.
-- **Comprensión:** la interfaz explica relaciones entre herramientas, datos y resultados.
-- **Logro:** el usuario llega al resultado con pocos pasos y conserva su contexto.
-- **Disfrute:** el sistema responde con precisión, suavidad y pequeños detalles útiles.
-
-Reglas base:
-
-1. Responder en `pointerdown`, no sólo en `click`.
-2. Mantener la manipulación 1:1 cuando exista arrastre.
-3. Iniciar cada animación desde el valor visual actual.
-4. Entregar la velocidad del gesto al resorte al soltar.
-5. Usar transformación y opacidad para movimiento.
-6. Mantener las rutas de entrada y salida espacialmente coherentes.
-7. Ofrecer una alternativa equivalente con movimiento reducido.
+- **Comprensión:** el usuario sabe qué está viendo, qué está activo y qué ocurrirá después.
+- **Continuidad:** la navegación conserva el contexto y evita recargas o saltos innecesarios.
+- **Eficiencia:** las acciones frecuentes están cerca, tienen nombres claros y requieren pocos pasos.
+- **Confianza:** los estados, errores, resultados y límites se comunican sin depender sólo del color.
+- **Calma:** el movimiento, el blur y la profundidad ayudan a entender la interfaz; no son decoración.
 
 ## 2. Arquitectura de la experiencia
 
-### Inicio
+La shell principal en [index.html](../index.html) proporciona:
 
-El inicio es un espacio de trabajo, no un dashboard recargado. Debe mostrar:
+- Inicio y búsqueda de herramientas.
+- Menús Archivo y Herramientas.
+- Estado de conexión.
+- Carga integrada mediante iframe.
+- Rutas profundas con `#tool=<id>`.
+- Regreso a la herramienta anterior sin perder contexto cuando sea posible.
 
-- Nombre y propósito de SHParro.
-- Búsqueda como acción primaria.
-- Herramientas agrupadas por intención: coordenadas, cartografía, relieve y utilidades.
-- Herramientas accesibles desde el menubar.
-- Estado de conectividad sin convertirlo en una alerta dominante.
+Las herramientas se registran en [tools.json](../tools.json) y viven en [Web/](../Web/). Cada herramienta puede tener su propio layout, pero debe respetar esta guía en responsive, legibilidad, foco y tratamiento de acciones.
 
-### Herramienta activa
+Los menús de la shell deben cerrarse al seleccionar cualquier zona externa, incluido el contenido del iframe. `Escape` debe cerrar primero la superficie activa.
 
-Al abrir una herramienta, la shell debe conservar el contexto de origen:
-
-- La herramienta aparece visualmente desde la tarjeta seleccionada.
-- Existe un botón volver siempre visible.
-- Se conserva el estado de la herramienta al regresar, cuando sea posible.
-- El nombre y la categoría quedan disponibles en una barra contextual.
-- El iframe o aplicación interna no debe bloquear la transición de la shell.
-
-### Menú móvil
-
-El menú móvil es una hoja lateral anclada a su botón de origen. Debe poder abrirse, cerrarse y revertirse mediante arrastre. El scrim acompaña el desplazamiento de la hoja.
-
-## 3. Lenguaje visual
+## 3. Lenguaje visual vigente
 
 ### Tono
 
-SHParro debe sentirse técnico pero no industrial: oscuro, preciso, silencioso y con acentos de color reservados para acciones y estados.
+La interfaz actual es clara, material y contenida. Combina superficies blancas translúcidas, fondos gris muy claro, bordes sutiles, blur y sombras moderadas. El resultado debe sentirse cercano a una herramienta nativa moderna, no a un dashboard saturado.
 
-### Paleta inicial
+### Paleta base
 
 | Token | Uso | Valor de referencia |
 |---|---|---|
-| `--canvas` | Fondo general | `#090909` |
-| `--surface` | Panel y tarjeta | `#151518` |
-| `--surface-raised` | Elemento elevado | `#1d1d22` |
-| `--ink` | Texto principal | `#f7f7f4` |
-| `--muted` | Texto secundario | `rgba(247,247,244,.68)` |
-| `--quiet` | Metadatos | `rgba(247,247,244,.48)` |
-| `--accent` | Acción primaria | `#ff5d78` |
-| `--success` | Operación completa | `#9bcf63` |
-| `--info` | Información técnica | `#77d9df` |
-| `--warning` | Conectividad o advertencia | `#d8c66d` |
+| `--canvas` / `--bg` | Fondo general | `#ebe5dc` |
+| `--surface` / `--panel` | Tarjetas y superficies | `rgba(255,255,255,.82–.84)` |
+| `--surface-raised` / `--raised` | Controles elevados | `#f5f1eb` |
+| `--ink` / `--text` | Texto principal | `#2d2d2d` |
+| `--muted` | Texto secundario | `#6f6f6f` |
+| `--line` | Bordes y separadores | `rgba(45,45,45,.16)` |
+| `--accent` | Acción y foco | `#414b99` |
+| `--info` / `--cyan` | Información técnica | `#9a9a9a` |
+| `--warning` | Alerta o estado crítico | `#ff4b48` |
 
-El acento rosa identifica acción y foco, no decoración general. No usarlo en todos los textos ni en grandes superficies.
+El azul identifica acciones, selección y foco. No debe convertirse en una superficie dominante. Los mensajes de advertencia o error deben incluir texto y no depender sólo del color.
 
 ### Tipografía
 
 - Interfaz: `Segoe UI Variable`, `Segoe UI`, sans-serif.
-- Datos técnicos y coordenadas: `Consolas`, monospace.
+- Coordenadas, códigos y valores técnicos: `Consolas`, monospace.
 - Títulos: peso medio, tamaño contenido y poco tracking.
-- Texto auxiliar: corto, con alto contraste y `line-height` generoso.
-
-No usar mayúsculas completas para párrafos. Reservarlas para etiquetas pequeñas como categorías o pasos.
+- Texto auxiliar: breve, con contraste suficiente y `line-height` cómodo.
+- Mayúsculas completas: sólo para etiquetas pequeñas, categorías o metadatos.
 
 ## 4. Materiales y profundidad
 
-### Superficies
+- **Canvas:** fondo claro sólido o con un gradiente radial muy sutil.
+- **Tarjetas:** fondo blanco translúcido, borde tenue, radio generoso y sombra corta.
+- **Toolbar y menús:** superficie translúcida con blur para separar el contenido posterior.
+- **Dynamic island:** superficie compacta, clara y táctil para controles móviles persistentes.
+- **Contenido de herramienta:** puede usar su propio sistema de tarjetas, pero debe conservar contraste y jerarquía.
 
-- **Canvas:** superficie sólida oscura.
-- **Tarjetas:** superficie elevada, borde de baja opacidad y sombra corta.
-- **Toolbar contextual:** material translúcido oscuro con blur medio.
-- **Drawer:** material translúcido oscuro, sombra profunda y scrim.
-- **Contenido de herramienta:** superficie sólida; no aplicar glassmorphism al iframe.
+Usar `backdrop-filter` sólo cuando ayude a separar capas. El blur no sustituye el contraste. No apilar varias superficies translúcidas sin una diferencia clara de profundidad.
 
-Ejemplo de toolbar:
-
-```css
-background: rgba(14, 14, 16, .72);
-backdrop-filter: blur(18px) saturate(130%);
--webkit-backdrop-filter: blur(18px) saturate(130%);
-```
-
-No apilar dos superficies claras translúcidas. El blur debe separar niveles, no sustituir el contraste.
-
-### Scrim
-
-Usar scrim sólo cuando el usuario deba concentrarse en una superficie superior:
-
-```css
-background: rgba(0, 0, 0, .48);
-```
-
-El scrim debe perder opacidad mientras el drawer se aleja y recuperar opacidad mientras vuelve.
+Las sombras deben ser moderadas. El recuadro de datum del conversor UTM es una excepción intencional: no tiene sombra para mantener una apariencia más ligera.
 
 ## 5. Componentes
 
-### Tarjeta de herramienta
+### Tarjetas
 
 Estados mínimos:
 
-- `default`: borde sutil, fondo elevado.
-- `hover`: elevación ligera y borde acentuado.
-- `pressed`: `scale(.985)`, fondo más profundo y respuesta inmediata.
+- `default`: superficie clara, borde sutil y sombra discreta.
+- `hover`: cambio ligero de borde o fondo; no depender de hover en móvil.
+- `pressed`: respuesta breve mediante escala o cambio de fondo.
 - `focused`: anillo visible de teclado.
 - `disabled/error`: menor contraste, pero texto todavía legible.
 
-Cada entrada del menú debe ser accionable como una unidad y abrir la herramienta sin pasos intermedios.
+### Botones y controles
 
-### Botones
-
-- Acción primaria: fondo de acento y texto claro.
+- Acción primaria: azul sólido y texto blanco.
 - Acción secundaria: superficie elevada y borde tenue.
-- Icono: sólo cuando el significado sea obvio o tenga `aria-label`.
-- Área táctil mínima: `44px`.
-- Feedback de pulsación en el mismo frame del contacto.
+- Iconos: sólo cuando el significado sea evidente o exista `aria-label`.
+- En móvil: aproximadamente `36–40px` de alto, según el contexto; deben seguir siendo cómodos para tocar sin ocupar espacio excesivo.
+- Texto de controles móviles: normalmente `10–12px`.
+- Inputs y selects móviles: aproximadamente `36px` de alto, con padding reducido y foco visible.
+- No usar `maxlength` sólo para resolver problemas visuales; reducir el ancho visual sin impedir valores válidos.
 
 ### Búsqueda
 
-La búsqueda debe estar siempre disponible en escritorio y ser el primer foco con `Ctrl/Cmd + K`. En móvil puede ocupar una fila completa. El filtrado debe ser instantáneo y no producir saltos bruscos de layout.
+La búsqueda de herramientas debe estar disponible en escritorio y responder a `Ctrl/Cmd + K`. En móvil puede ocultarse cuando la herramienta está activa para ceder espacio al contenido.
 
-### Toast
+En ArMAPS, la búsqueda de capas vive en el dynamic island móvil. Las sugerencias sólo son visibles mientras existe una búsqueda activa, muestran como máximo tres opciones y permiten activar/desactivar o descartar una capa.
 
-Usar toasts para confirmaciones breves, no para errores que requieran decisión. Deben entrar con una transición corta, tener `aria-live` y desaparecer sin desplazar el contenido principal.
+### Menús
 
-## 6. Movimiento e interacción
+Los menús Archivo y Herramientas deben tener blur suficiente para distinguirse del fondo. Se cierran al hacer clic o tocar fuera de ellos, incluido el iframe, y también con `Escape`.
 
-### Apertura de herramienta
+## 6. Patrones específicos de herramientas
 
-1. `pointerdown`: activar estado `pressed`.
-2. Mantener una tolerancia de `10px` para distinguir tap de arrastre.
-3. `pointerup` sin desplazamiento significativo: abrir.
-4. Animar `transform` y `opacity` desde la posición actual.
-5. Mostrar el contenido cuando la shell ya esté estable.
-6. En el cierre, recorrer el mismo camino en sentido inverso.
+### ArMAPS
 
-### Arrastre de hoja
+- La sidebar de capas está colapsada por defecto en escritorio.
+- En móvil la sidebar y su botón lateral desaparecen por completo.
+- El dynamic island concentra búsqueda de lugares, zoom, basemap y ubicación.
+- La vista inicial móvil queda centrada en México; escritorio conserva su encuadre independiente.
+- El selector de basemap se cierra al seleccionar cualquier zona externa.
+- Las capas deben tener palabras clave útiles para fuente, tipo de servicio y temática, por ejemplo INEGI, WMS, vialidad o carretera.
 
-- Usar `Pointer Events` y `setPointerCapture`.
-- Respetar el offset exacto donde el usuario tomó la hoja.
-- Permitir invertir el gesto en cualquier instante.
-- Menos de `80px` proyectados: regresar.
-- Más de `80px` o con velocidad suficiente: cerrar.
-- Aplicar rubber-band en los límites.
+### Conversor UTM
 
-### Parámetros de referencia
+- En escritorio se conservan las secciones de coordenadas individuales y hoja de coordenadas como tarjetas independientes.
+- En móvil ambas viven en una tarjeta con pestañas: “Coordenadas individuales” y “Hoja de coordenadas”.
+- El orden móvil es: título y subtítulo, datum de origen, tipo de conversión y contenido del conversor.
+- El datum de origen usa el lenguaje material de ArMAPS, pero sin sombra.
+- Las pestañas y botones deben conservar una escala compacta y táctil.
 
-| Movimiento | Damping | Response | Bounce |
-|---|---:|---:|---:|
-| Entrada/salida de vista | `1.0` | `0.4s` | `0` |
-| Drawer/hoja | `0.8` | `0.3s` | Sólo con momentum claro |
-| Rotación | `0.8` | `0.4s` | Moderado |
+### Transformación INEGI
 
-En Vanilla, implementar el resorte con `requestAnimationFrame` y el estado `{ position, velocity, target }`. No reiniciar desde el valor lógico inicial mientras exista una animación activa.
+- La sección de puntos originales se titula “Datos de entrada”.
+- La tabla móvil conserva formato tabular y usa desplazamiento horizontal interno, nunca overflow de la página.
+- Las columnas `ID`, `Este`, `Norte` y `Z` se alinean con entradas de máximo `12ch` visuales.
+- Los valores largos siguen siendo editables; el ancho visual no implica límite de caracteres.
 
-No usar `@keyframes` ni transiciones fijas para gestos arrastrables.
+### CEM
 
-### Reduced motion
+- Sus pestañas, formularios, tarjetas y acciones usan la misma escala móvil compacta.
+- Los resultados deben mantener una jerarquía clara entre consulta, estado, elevación y descargas.
 
-Con `prefers-reduced-motion: reduce`:
-
-- Eliminar desplazamiento, escala y rebote.
-- Usar cambio instantáneo o crossfade de `120–160ms`.
-- Mantener estados de foco, color y progreso.
-- Conservar la posibilidad funcional de cerrar y revertir.
-
-## 7. Layout responsive
+## 7. Responsive
 
 ### Escritorio
 
 - Barra superior ligera y persistente.
-- Grilla de tarjetas con columnas fluidas.
-- Herramienta activa a pantalla completa dentro de la shell.
-- Metadatos secundarios con contraste bajo.
-
-### Tablet
-
-- Reducir padding horizontal.
-- Mantener búsqueda y navegación en una sola fila cuando quepan.
-- Convertir grupos muy densos en secciones plegables.
+- Grillas fluidas y tarjetas con espacio suficiente.
+- La herramienta activa ocupa el área disponible dentro de la shell.
+- El contenido secundario conserva contraste bajo, pero legible.
 
 ### Móvil
 
-- Una columna.
-- Menú como drawer.
-- Herramienta como hoja completa.
-- Toolbar contextual con altura mínima de `52px`.
-- Acciones importantes en el alcance del pulgar.
-- No depender de hover para comunicar estados.
+- Una columna y prioridad visual clara.
+- Acciones principales al alcance del pulgar.
+- No depender de hover.
+- Reducir padding, tipografía y altura de controles sin volverlos difíciles de tocar.
+- Evitar overflow horizontal del documento.
+- Las tablas pueden desplazarse horizontalmente dentro de su propio recuadro.
+- Ocultar o colapsar elementos secundarios cuando compitan con la tarea principal.
+- Validar especialmente en aproximadamente `390px` de ancho.
 
-## 8. Accesibilidad y seguridad de uso
+El breakpoint común es `max-width: 760px`; algunas tablas usan ajustes adicionales alrededor de `520px`.
 
+## 8. Movimiento y accesibilidad
+
+- La respuesta visual debe comenzar lo antes posible; la shell prioriza `pointerdown` para cerrar superficies y responder a gestos.
+- Las herramientas pueden usar `click` para acciones simples, siempre que la respuesta sea inmediata y accesible.
+- Usar `transform` y `opacity` para movimiento principal.
+- No crear transiciones que impidan cerrar o revertir una interacción.
+- Mantener `prefers-reduced-motion`: reducir escalas, desplazamientos y rebotes; conservar estados, foco y funcionalidad.
 - Todos los controles deben tener nombre accesible.
-- El foco debe permanecer visible y seguir al contenido activo.
-- `Escape` cierra menú, drawer o modal en ese orden.
-- El botón volver debe existir aunque el gesto esté disponible.
-- No comunicar estados sólo por color.
-- Anunciar resultados y errores mediante `aria-live`.
-- Evitar que un arrastre accidental active una herramienta.
-- Mantener contraste suficiente en tarjetas y textos técnicos.
+- El foco debe permanecer visible y seguir el contenido activo.
+- Usar `aria-live` para resultados, estados y errores relevantes.
+- No activar una herramienta por un arrastre accidental.
 
 ## 9. Convenciones de implementación
 
-- Preferir `transform: translate3d()` y `opacity`.
+- Mantener las rutas `#tool=<id>` y sincronizarlas con navegación del navegador.
+- Mantener los iframes montados cuando sea posible para evitar recargas innecesarias.
+- Preferir `transform: translate3d()` y `opacity` durante movimiento.
 - Usar `will-change` sólo durante movimiento activo.
-- Mantener el iframe montado durante una salida para evitar recargas innecesarias.
-- Centralizar estados de navegación en una pequeña máquina de estados.
-- Eliminar referencias obsoletas de [`js/shparro.js`](../js/shparro.js) antes de añadir nuevas animaciones.
-- Sustituir `display: none` como mecanismo único de transición.
-- Mantener URLs profundas `#tool=<id>` y sincronizarlas con `popstate`.
+- Centralizar estados de navegación en la shell.
+- Mantener los estilos responsive dentro de los archivos de cada herramienta.
+- Usar `apply_patch` para editar archivos.
+- Antes de cambios ambiguos, confirmar el alcance y la decisión de diseño.
 
-## 10. Criterios de aceptación visual
+## 10. Criterios de aceptación
 
 Una interacción está lista cuando:
 
-- Responde visualmente en `pointerdown`.
-- Puede interrumpirse y revertirse sin salto.
-- Continúa con la velocidad del gesto.
-- Usa sólo transformaciones y opacidad para el movimiento principal.
-- Mantiene el origen y el destino espacialmente relacionados.
-- Funciona con teclado y lector de pantalla.
-- Tiene una variante de movimiento reducido.
-- No bloquea la shell mientras carga una herramienta externa.
-
-La interfaz debe sentirse física, pero nunca teatral: la animación debe explicar la relación entre estados y desaparecer cuando ya no aporta información.
+- La jerarquía visual es clara en móvil y escritorio.
+- Los botones y textos tienen escala adecuada para el viewport.
+- No hay overflow horizontal accidental.
+- La acción responde de forma perceptible y puede revertirse.
+- El foco de teclado es visible.
+- Los estados importantes tienen texto o semántica accesible.
+- `prefers-reduced-motion` sigue siendo funcional.
+- El layout de escritorio no cambia cuando el requerimiento es móvil.
+- La interfaz se siente precisa y física, pero nunca teatral.

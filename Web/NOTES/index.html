@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ebe5dc">
+  <title>Notas de campo - SHParro</title>
+  <link rel="stylesheet" href="./styles.css?v=20261113">
+</head>
+<body>
+  <main class="notes-app">
+    <header class="notes-header">
+      <div>
+        <span class="eyebrow">SHParro / Registro de campo</span>
+        <h1>Notas de campo</h1>
+        <p>Documenta hallazgos con imágenes y ubicación del dispositivo.</p>
+      </div>
+      <div class="session-badge" id="persistenceBadge" aria-label="Los proyectos se guardan localmente">
+        <span aria-hidden="true"></span> Guardado local
+      </div>
+    </header>
+
+    <section class="project-toolbar card" aria-labelledby="projectTitle">
+      <div>
+        <span class="eyebrow">Espacio de trabajo</span>
+        <h2 id="projectTitle">Proyecto activo</h2>
+      </div>
+      <div class="project-controls">
+        <label class="project-select-label" for="projectSelect">Proyecto
+          <select id="projectSelect" aria-label="Seleccionar proyecto"></select>
+        </label>
+        <button class="secondary-button" id="newProject" type="button">Nuevo proyecto</button>
+        <button class="secondary-button" id="renameProject" type="button">Renombrar</button>
+        <button class="secondary-button danger-button" id="deleteProject" type="button">Eliminar</button>
+      </div>
+      <p class="storage-status" id="storageStatus" role="status" aria-live="polite">Cargando proyectos…</p>
+    </section>
+
+    <div class="notes-layout">
+      <section class="note-editor card" aria-labelledby="editorTitle">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow" id="editorMode">Nueva nota</span>
+            <h2 id="editorTitle">Crear nota</h2>
+          </div>
+          <button class="secondary-button hidden" id="cancelEdit" type="button">Cancelar edición</button>
+        </div>
+
+        <div class="note-fields">
+          <label>Título
+            <input id="noteTitle" type="text" maxlength="100" placeholder="Ej. Daño en vialidad">
+          </label>
+          <label>Categoría
+            <select id="noteCategory">
+              <option value="Reporte">Reporte</option>
+              <option value="Inspección">Inspección</option>
+              <option value="Evidencia">Evidencia</option>
+              <option value="Hallazgo">Hallazgo</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </label>
+          <label class="full-field">Descripción
+            <textarea id="noteDescription" maxlength="1000" rows="4" placeholder="Agrega contexto, medidas o detalles relevantes..."></textarea>
+          </label>
+        </div>
+
+        <div class="image-section">
+          <div class="subheading">
+            <div>
+              <h3>Imágenes</h3>
+              <p>La ubicación se solicita al adjuntar la primera imagen.</p>
+            </div>
+            <label class="add-images-button" for="imageInput">Añadir imágenes
+              <input id="imageInput" type="file" accept="image/*" multiple>
+            </label>
+          </div>
+          <div class="location-session-status" id="locationSessionStatus" role="status" aria-live="polite">
+            Ubicación: aún no solicitada
+          </div>
+          <div class="image-list" id="draftImages" aria-live="polite">
+            <div class="empty-images">Añade una o varias imágenes para comenzar.</div>
+          </div>
+        </div>
+
+        <div class="editor-actions">
+          <button class="primary-button" id="saveNote" type="button">Guardar nota</button>
+          <button class="secondary-button" id="clearDraft" type="button">Limpiar</button>
+        </div>
+        <p class="form-message" id="formMessage" role="status" aria-live="polite"></p>
+      </section>
+
+      <aside class="notes-list-panel card" aria-labelledby="notesTitle">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Proyecto actual</span>
+            <h2 id="notesTitle">Notas guardadas <span id="notesCount">0</span></h2>
+          </div>
+        </div>
+        <div id="savedNotes" class="saved-notes">
+          <div class="empty-notes">Todavía no hay notas guardadas.</div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <div class="modal-backdrop hidden" id="locationModal" role="presentation">
+    <section class="permission-dialog" role="dialog" aria-modal="true" aria-labelledby="locationModalTitle">
+      <span class="dialog-icon" aria-hidden="true">⌖</span>
+      <h2 id="locationModalTitle">No se pudo obtener la ubicación</h2>
+      <p id="locationModalText">Puedes continuar sin coordenadas. Las imágenes seguirán siendo útiles para tus reportes.</p>
+      <div class="dialog-actions">
+        <button class="secondary-button" id="cancelLocation" type="button">Cancelar adjunto</button>
+        <button class="primary-button" id="continueWithoutLocation" type="button">Continuar sin coordenadas</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop hidden" id="projectModal" role="presentation">
+    <section class="permission-dialog project-dialog" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle">
+      <span class="dialog-icon" aria-hidden="true">▤</span>
+      <h2 id="projectModalTitle">Nuevo proyecto</h2>
+      <label for="projectNameInput">Nombre del proyecto
+        <input id="projectNameInput" type="text" maxlength="80" placeholder="Ej. Inspección norte">
+      </label>
+      <p class="dialog-error" id="projectModalError" role="alert"></p>
+      <div class="dialog-actions">
+        <button class="secondary-button" id="cancelProject" type="button">Cancelar</button>
+        <button class="primary-button" id="confirmProject" type="button">Guardar proyecto</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop hidden" id="confirmModal" role="presentation">
+    <section class="permission-dialog" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
+      <span class="dialog-icon" aria-hidden="true">!</span>
+      <h2 id="confirmModalTitle">Confirmar acción</h2>
+      <p id="confirmModalText"></p>
+      <div class="dialog-actions">
+        <button class="secondary-button" id="cancelConfirm" type="button">Cancelar</button>
+        <button class="primary-button danger-confirm" id="acceptConfirm" type="button">Eliminar</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="./app.js?v=20261113"></script>
+</body>
+</html>

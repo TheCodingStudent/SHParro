@@ -79,3 +79,31 @@ input:focus,select:focus { border-color:var(--accent); box-shadow:0 0 0 4px rgba
 button,.secondary-button { border-color:var(--accent); background:rgba(0,113,227,.08); }
 button:hover:not(:disabled),.secondary-button:hover { background:rgba(0,113,227,.16); }
 .primary-button { background:var(--accent); }
+
+/* Shared button alignment: icon and label always share one visual center. */
+button,.secondary-button { display:inline-flex; align-items:center; justify-content:center; gap:.45rem; }
+
+/* R2-D2 palette. */
+:root {
+  --bg:#ebe5dc; --panel:rgba(255,255,255,.84); --raised:#f5f1eb;
+  --line:rgba(45,45,45,.16); --text:#2d2d2d; --muted:#6f6f6f;
+  --accent:#414b99; --cyan:#9a9a9a;
+}
+body { background:radial-gradient(circle at 85% 4%,rgba(65,75,153,.08),transparent 28rem),var(--bg); }
+
+/* Shared context scale for CEM actions. */
+button,.secondary-button { min-height:40px; padding:0 12px; }
+.source-tabs button { min-height:40px; }
+.table-actions button { min-height:34px; padding:0 10px; font-size:11px; }
+.primary-button { min-width:180px; background:#414b99; color:#fff; }
+.primary-button:hover:not(:disabled) { background:#354083; }
+button:disabled,.primary-button:disabled { background:var(--raised); border-color:var(--line); color:var(--muted); }
+.source-tabs button.active { background:rgba(65,75,153,.14); color:#2d2d2d; }
+input:focus,select:focus { box-shadow:0 0 0 4px rgba(65,75,153,.14); }
+button,.secondary-button { background:rgba(65,75,153,.08); }
+button:hover:not(:disabled),.secondary-button:hover { background:rgba(65,75,153,.16); }
+@media (max-width:760px) {
+  button,.secondary-button { min-height:38px; padding:0 11px; }
+  .table-actions button { min-height:34px; }
+  .primary-button { min-width:0; }
+}

@@ -1507,7 +1507,7 @@ details summary::-webkit-details-marker {
   box-shadow: none;
 }
 
-.dock-search-button {
+.map-dock .dock-search-button {
   min-width: 38px;
   height: 32px;
   padding: 0 10px;
@@ -2191,5 +2191,89 @@ details summary::-webkit-details-marker {
 
   .map-dock button {
     font-size: 12px;
+  }
+}
+
+/* Shared button alignment: icon and label always share one visual center. */
+button { display:inline-flex; align-items:center; justify-content:center; gap:.45rem; }
+
+/* R2-D2 palette: warm ivory, indigo, charcoal, mechanical gray and coral. */
+:root {
+  --bg:#ebe5dc; --panel:rgba(255,255,255,.84); --panel-2:#f5f1eb;
+  --line:rgba(45,45,45,.16); --text:#2d2d2d; --muted:#6f6f6f;
+  --accent:#414b99; --coral:#ff4b48; --mechanical-gray:#9a9a9a;
+}
+body,.map-area { background:var(--bg); color:var(--text); }
+.map-sidebar { background:rgba(255,255,255,.84); border-color:rgba(45,45,45,.16); }
+.sidebar-toggle { background:rgba(255,253,249,.82); border-color:rgba(45,45,45,.16); color:var(--text); }
+.home-logo,.primary-button,.dock-search-button:hover { background:var(--accent); }
+.layer-search-results,.basemap-picker { background:rgba(255,253,249,.95); border-color:rgba(45,45,45,.16); }
+
+/* Shared context scale for map controls. */
+.map-sidebar button { min-height:40px; padding:0 12px; }
+.map-sidebar .layer-search-input button,
+.map-sidebar .layer-search-dismiss { min-height:32px; padding:0; }
+.map-dock button { min-height:40px; }
+.dock-zoom button,
+.map-dock .locate-button { width:40px; height:40px; }
+.primary-button { background:#414b99; color:#fff; }
+.primary-button:hover:not(:disabled) { background:#354083; }
+button:disabled,.primary-button:disabled { background:var(--panel-2); border-color:var(--line); color:var(--muted); }
+.map-sidebar .layer-row > span:not(.layer-state):not(.layer-type-badge),
+.map-sidebar .layer-search-option strong,
+.map-sidebar .layer-search-option-details small { color:var(--text); }
+.map-sidebar .layer-type-badge,
+.map-sidebar .layer-search-dismiss:hover,
+.map-sidebar .layer-search-dismiss:focus-visible { color:var(--accent); }
+.map-sidebar button:hover:not(:disabled),
+.map-sidebar .layer-search-option:hover,
+.map-sidebar .layer-search-option:focus-visible { background:rgba(65,75,153,.1); }
+.map-sidebar input:focus,
+.map-sidebar select:focus,
+.layer-search-input:focus-within { border-color:var(--accent); box-shadow:0 0 0 4px rgba(65,75,153,.14); }
+@media (max-width:760px) {
+  .map-sidebar button { min-height:38px; }
+  .map-dock button { min-height:40px; }
+}
+
+/* Dynamic island search: the action stays at the far right of the field. */
+.dock-search {
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: 10px;
+}
+
+.dock-search-icon {
+  display: none;
+}
+
+.dock-search input {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+}
+
+.map-dock .dock-search-button {
+  flex: 0 0 32px;
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  min-height: 32px;
+  padding: 0;
+  margin-left: auto;
+  border-radius: 50%;
+}
+
+.dock-search {
+  padding-right: 5px;
+}
+
+@media (max-width:480px) {
+  .map-dock .dock-search-button {
+    flex-basis: 30px;
+    width: 30px;
+    min-width: 30px;
+    height: 30px;
+    min-height: 30px;
   }
 }

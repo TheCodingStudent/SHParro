@@ -39,6 +39,8 @@ header p { margin:0; color:var(--muted); font-size:13px; }
 .coordinate-input-grid > label { grid-column:auto; }
 .coordinate-input-grid > .primary-button { grid-column:4; }
 .coordinate-input-grid:has(.geographic-fields:not([hidden])) { grid-template-columns:minmax(430px,1fr) 140px 140px auto; }
+.utm-settings-stack { grid-column:2; display:flex; flex-direction:column; gap:12px; align-self:end; }
+.utm-settings-stack .primary-button { width:100%; min-width:0; }
 label { display:flex; flex-direction:column; gap:7px; color:#c9cad0; font-size:11px; }
 input,select { width:100%; min-height:38px; border:1px solid var(--line); border-radius:6px; padding:7px 9px; outline:none; background:#111216; color:var(--text); }
 input:focus,select:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(167,139,250,.12); }
@@ -68,6 +70,7 @@ th { position:sticky; top:0; background:var(--raised); text-align:center; font-f
   main { grid-row:2; padding-top:0; }
   .coordinate-input-grid,.coordinate-input-grid:has(.geographic-fields:not([hidden])) { grid-template-columns:1fr 1fr; }
   .coordinate-fields,.coordinate-input-grid > .primary-button { grid-column:1/-1; }
+  .utm-settings-stack { grid-column:1/-1; }
   .section-heading { align-items:flex-start; flex-direction:column; }
 }
 @media (max-width:520px) {
@@ -78,6 +81,27 @@ th { position:sticky; top:0; background:var(--raised); text-align:center; font-f
   .mode-tabs,.coordinate-input-grid,.coordinate-input-grid:has(.geographic-fields:not([hidden])),.utm-fields,.geographic-fields { grid-template-columns:1fr; }
   .primary-button { width:100%; }
   .table-actions { flex-wrap:wrap; }
+}
+
+/* Desktop single-coordinate form: balanced 2x2 field grid with a full-width action. */
+@media (min-width:901px) {
+  .coordinate-input-grid,
+  .coordinate-input-grid:has(.geographic-fields:not([hidden])) {
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+
+  .coordinate-input-grid .utm-fields,
+  .coordinate-input-grid .geographic-fields,
+  .coordinate-input-grid .utm-settings-stack {
+    display:contents;
+  }
+
+  .coordinate-input-grid .utm-settings-stack .primary-button {
+    grid-column:1/-1;
+    width:100%;
+    min-width:0;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration:.01ms !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
@@ -92,6 +116,37 @@ input:focus,select:focus { border-color:var(--accent); box-shadow:0 0 0 4px rgba
 button { border-color:var(--accent); background:rgba(0,113,227,.08); }
 button:hover:not(:disabled) { background:rgba(0,113,227,.16); }
 .primary-button { background:var(--accent); }
+
+/* Shared button alignment: icon and label always share one visual center. */
+button { display:inline-flex; align-items:center; justify-content:center; gap:.45rem; }
+
+/* R2-D2 palette. */
+:root {
+  --bg:#ebe5dc; --panel:rgba(255,255,255,.84); --raised:#f5f1eb;
+  --line:rgba(45,45,45,.16); --text:#2d2d2d; --muted:#6f6f6f;
+  --accent:#414b99; --cyan:#9a9a9a; --yellow:#ff4b48;
+}
+body { background:radial-gradient(circle at 50% 0,rgba(65,75,153,.08),transparent 32rem),var(--bg); }
+
+/* Shared context scale for UTM actions. */
+button { min-height:40px; padding:0 12px; }
+.mobile-tool-tabs button { min-height:36px; padding:0 8px; }
+.table-actions button { min-height:34px; padding:0 10px; font-size:11px; }
+.primary-button { min-width:160px; background:#414b99; color:#fff; }
+.primary-button:hover:not(:disabled) { background:#354083; }
+.mobile-tool-tabs button.active { color:#414b99; }
+.mode-tabs button.active { background:rgba(65,75,153,.14); border-color:#414b99; color:#2d2d2d; }
+input:focus,select:focus { box-shadow:0 0 0 4px rgba(65,75,153,.14); }
+button { background:rgba(65,75,153,.08); }
+button:hover:not(:disabled) { background:rgba(65,75,153,.16); }
+button.primary-button { background:#414b99; }
+button:disabled,.primary-button:disabled { background:var(--raised); border-color:var(--line); color:var(--muted); }
+@media (max-width:760px) {
+  button { min-height:38px; padding:0 11px; }
+  .mobile-tool-tabs button { min-height:36px; }
+  .table-actions button { min-height:34px; }
+  .primary-button { min-width:0; }
+}
 
 /* Datum sidebar aligned with the ArMAPS visual system. */
 .datum-sidebar {

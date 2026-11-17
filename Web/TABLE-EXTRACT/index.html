@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ebe5dc">
+  <title>Extractor de tablas - SHParro</title>
+  <link rel="stylesheet" href="./styles.css?v=20261117">
+</head>
+<body>
+  <main class="extractor-app">
+    <header class="extractor-header">
+      <div>
+        <span class="eyebrow">SHParro / Automatización documental</span>
+        <h1>Extractor de tablas</h1>
+        <p>Carga reportes PDF, revisa sus páginas y prepara plantillas reutilizables.</p>
+      </div>
+      <div class="local-badge"><span></span> Procesamiento local</div>
+    </header>
+
+    <section class="toolbar card" aria-label="Carga y plantillas">
+      <div class="toolbar-group">
+        <span class="toolbar-label">Documentos</span>
+        <label class="action-button primary-button" for="pdfFiles">Añadir PDF
+          <input id="pdfFiles" type="file" accept="application/pdf" multiple>
+        </label>
+        <label class="action-button secondary-button" for="pdfFolder">Añadir carpeta
+          <input id="pdfFolder" type="file" accept="application/pdf" webkitdirectory directory multiple>
+        </label>
+      </div>
+      <div class="toolbar-group template-actions">
+        <span class="toolbar-label">Plantillas JSON</span>
+        <label class="action-button secondary-button" for="templateFile">Importar
+          <input id="templateFile" type="file" accept="application/json,.json">
+        </label>
+        <button class="secondary-button" id="exportTemplates" type="button">Descargar JSON</button>
+      </div>
+    </section>
+
+    <div class="workspace">
+      <aside class="documents-panel card" aria-labelledby="documentsTitle">
+        <div class="panel-heading">
+          <div><span class="eyebrow">Entrada</span><h2 id="documentsTitle">Documentos <span id="documentCount">0</span></h2></div>
+        </div>
+        <div id="documentsList" class="documents-list">
+          <div class="empty-state">Añade uno o varios PDFs para comenzar.</div>
+        </div>
+      </aside>
+
+      <section class="viewer-panel card" aria-labelledby="viewerTitle">
+        <div class="panel-heading viewer-heading">
+          <div><span class="eyebrow">Previsualización</span><h2 id="viewerTitle">Selecciona un documento</h2></div>
+          <div class="viewer-controls">
+            <button id="previousPage" class="icon-button" type="button" aria-label="Página anterior">←</button>
+            <span id="pageIndicator">— / —</span>
+            <button id="nextPage" class="icon-button" type="button" aria-label="Página siguiente">→</button>
+            <button id="zoomOut" class="icon-button" type="button" aria-label="Alejar">−</button>
+            <span id="zoomIndicator">100%</span>
+            <button id="zoomIn" class="icon-button" type="button" aria-label="Acercar">+</button>
+          </div>
+        </div>
+        <div id="pageCanvasWrap" class="page-canvas-wrap">
+          <div class="empty-state">La página seleccionada aparecerá aquí.</div>
+          <canvas id="pageCanvas" hidden></canvas>
+        </div>
+        <div class="page-status" id="pageStatus" role="status" aria-live="polite">Sin documento seleccionado.</div>
+      </section>
+
+      <aside class="pages-panel card" aria-labelledby="pagesTitle">
+        <div class="panel-heading"><div><span class="eyebrow">Documento actual</span><h2 id="pagesTitle">Páginas</h2></div></div>
+        <div id="pagesList" class="pages-list"><div class="empty-state">Las páginas se listarán aquí.</div></div>
+      </aside>
+
+      <section class="templates-panel card" aria-labelledby="templatesTitle">
+        <div class="panel-heading"><div><span class="eyebrow">Biblioteca local</span><h2 id="templatesTitle">Plantillas <span id="templateCount">0</span></h2></div></div>
+        <div id="templatesList" class="templates-list"><div class="empty-state">No hay plantillas cargadas.</div></div>
+      </section>
+    </div>
+  </main>
+  <div id="toastRegion" class="toast-region" aria-live="polite"></div>
+  <script type="module" src="./app.js?v=20261117"></script>
+</body>
+</html>

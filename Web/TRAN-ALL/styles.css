@@ -281,3 +281,43 @@ input:focus,select:focus { border-color:var(--accent); box-shadow:0 0 0 4px rgba
 button { border-radius:10px; border-color:var(--accent); background:rgba(0,113,227,.08); }
 button:hover:not(:disabled) { background:rgba(0,113,227,.16); }
 .primary-button { background:var(--accent); }
+
+/* Shared button alignment: icon and label always share one visual center. */
+button { display:inline-flex; align-items:center; justify-content:center; gap:.45rem; }
+
+/* R2-D2 palette. */
+:root {
+  --bg:#ebe5dc; --panel:rgba(255,255,255,.84); --panel-raised:#f5f1eb;
+  --line:rgba(45,45,45,.16); --line-bright:rgba(45,45,45,.28);
+  --text:#2d2d2d; --muted:#6f6f6f; --accent:#414b99; --cyan:#9a9a9a;
+  --yellow:#ff4b48;
+}
+body { background:radial-gradient(circle at 50% 0,rgba(65,75,153,.08),transparent 32rem),var(--bg); }
+
+/* Shared context scale and highlighted primary action. */
+button { min-height:40px; padding:0 12px; }
+.tool-button,
+button.tool-button { min-height:32px; padding:0 10px; font-size:10px; }
+.remove-point,
+button.remove-point { width:26px; min-height:26px; padding:0; }
+.primary-action .primary-button {
+  min-width:210px;
+  min-height:40px;
+  border-color:#414b99;
+  background:#414b99;
+  color:#fff;
+}
+.primary-action .primary-button:hover:not(:disabled) { background:#354083; }
+button:disabled,.primary-action .primary-button:disabled { background:var(--panel-raised); border-color:var(--line); color:var(--muted); }
+select:focus { box-shadow:0 0 0 3px rgba(65,75,153,.14); }
+button:hover:not(:disabled) { background:rgba(65,75,153,.16); }
+@media (max-width:520px) {
+  button { min-height:38px; padding:0 11px; }
+  .tool-button,
+  button.tool-button { min-height:32px; padding:0 8px; }
+  .primary-action .primary-button {
+    width:min(100%,240px);
+    min-width:0;
+    align-self:center;
+  }
+}

@@ -49,17 +49,19 @@
           <label>Latitud <input id="latitude" type="text" placeholder="20.674000"></label>
           <label>Longitud <input id="longitude" type="text" placeholder="-103.343000"></label>
         </div>
-        <label>Zona UTM
-          <select id="zone">
-            <option value="">Seleccione</option>
-            <option value="11">11</option><option value="12">12</option><option value="13">13</option>
-            <option value="14">14</option><option value="15">15</option><option value="16">16</option>
-          </select>
-        </label>
-        <label>Hemisferio
-          <select id="hemisphere"><option value="N">Norte</option><option value="S">Sur</option></select>
-        </label>
-        <button class="primary-button" id="convertSingle" type="button">Convertir</button>
+        <div class="utm-settings-stack">
+          <label>Zona UTM
+            <select id="zone">
+              <option value="">Seleccione</option>
+              <option value="11">11</option><option value="12">12</option><option value="13">13</option>
+              <option value="14">14</option><option value="15">15</option><option value="16">16</option>
+            </select>
+          </label>
+          <label>Hemisferio
+            <select id="hemisphere"><option value="N">Norte</option><option value="S">Sur</option></select>
+          </label>
+          <button class="primary-button" id="convertSingle" type="button">Convertir</button>
+        </div>
       </div>
       <div class="result-panel" id="singleResult" hidden></div>
     </section>

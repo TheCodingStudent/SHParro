@@ -9,5 +9,3 @@ Posibles ideas:
 - Una herramienta que tome en tiempo real tu ubicacion y al final pueda exportarse esa informacion
 
 - Agregar medicion a ArMaps
-
-- Hacer que el converson de coordenadas UTM no utilice internet

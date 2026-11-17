@@ -42,5 +42,27 @@
     "status": "available",
     "offline": false,
     "icon": "⌖"
+  },
+  {
+    "id": "field-notes",
+    "name": "Notas de campo",
+    "shortName": "NOTAS",
+    "description": "Registra notas, imágenes y coordenadas del dispositivo durante la sesión.",
+    "category": "Trabajo de campo",
+    "path": "./Web/NOTES/index.html",
+    "status": "available",
+    "offline": true,
+    "icon": "▤"
+  },
+  {
+    "id": "table-extract",
+    "name": "Extractor de tablas",
+    "shortName": "TABLAS",
+    "description": "Carga PDFs, revisa sus páginas y asigna plantillas JSON para extracción local.",
+    "category": "Automatización documental",
+    "path": "./Web/TABLE-EXTRACT/index.html",
+    "status": "available",
+    "offline": true,
+    "icon": "▦"
   }
 ]
